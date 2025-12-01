@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Learning Playground</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --secondary: #5DADE2;
+            --accent: #3498DB;
+            --light: #F8F9FA;
+            --dark: #2C3E50;
+            --success: #48C9B0;
+            --warning: #E74C3C;
+            --dark-bg: #2C3E50;
+            --darker-bg: #1A252F;
+            --code-bg: #1a1a1a;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --header-gradient: linear-gradient(135deg, #4A90E2 0%, #3498DB 100%);
+            --button-gradient: linear-gradient(45deg, #4A90E2, #5DADE2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
+            color: var(--light);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--header-gradient);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: var(--header-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #E0E0E0;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .content-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1100px) {
+            .content-area {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .concepts-panel {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            height: fit-content;
+        }
+        
+        .concepts-panel h2 {
+            color: var(--success);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+        }
+        
+        .concepts-panel h2 i {
+            margin-right: 10px;
+        }
+        
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .concept-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(72, 201, 176, 0.3);
+        }
+        
+        .concept-card.active {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+            border: 2px solid var(--success);
+        }
+        
+        .concept-card h3 {
+            color: var(--success);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .concept-card h3 i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .concept-card p {
+            color: #E0E0E0;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+        
+        .concept-card .level {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .level-beginner {
+            background: rgba(72, 201, 176, 0.2);
+            color: var(--success);
+        }
+        
+        .level-intermediate {
+            background: rgba(74, 144, 226, 0.2);
+            color: var(--primary);
+        }
+        
+        .level-advanced {
+            background: rgba(93, 173, 226, 0.2);
+            color: var(--secondary);
+        }
+        
+        .code-panel {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .code-panel h2 {
+            color: var(--success);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+        }
+        
+        .code-panel h2 i {
+            margin-right: 10px;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .concept-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            flex-grow: 1;
+            overflow: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .code-block code {
+            color: #e9ecef;
+        }
+        
+        .keyword {
+            color: #FF6B6B;
+        }
+        
+        .function {
+            color: #4ECDC4;
+        }
+        
+        .string {
+            color: #A3E635;
+        }
+        
+        .number {
+            color: #FF9E64;
+        }
+        
+        .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+        
+        .variable {
+            color: #9CDCFE;
+        }
+        
+        .operator {
+            color: #D4D4D4;
+        }
+        
+        .output-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .output-section h3 {
+            color: var(--success);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .output-section h3 i {
+            margin-right: 10px;
+        }
+        
+        #output {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 120px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e9ecef;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            background: var(--button-gradient);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+        
+        .btn-run {
+            background: linear-gradient(45deg, var(--success), var(--primary));
+        }
+        
+        .btn-clear {
+            background: linear-gradient(45deg, var(--warning), #C44536);
+        }
+        
+        .btn-explain {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+        }
+        
+        .explanation-panel {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+        }
+        
+        .explanation-panel h2 {
+            color: var(--success);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+        }
+        
+        .explanation-panel h2 i {
+            margin-right: 10px;
+        }
+        
+        #explanation {
+            line-height: 1.7;
+            color: #E0E0E0;
+        }
+        
+        #explanation h3 {
+            color: var(--primary);
+            margin: 20px 0 10px;
+        }
+        
+        #explanation ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        #explanation li {
+            margin-bottom: 8px;
+        }
+        
+        #explanation code {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #B0B0B0;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .progress-text {
+            font-size: 1rem;
+            color: #E0E0E0;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--header-gradient);
+            border-radius: 5px;
+            width: 8%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JavaScript Learning Playground</h1>
+            <p class="subtitle">Master JavaScript fundamentals through interactive examples and detailed explanations. Click on any concept to explore it in detail.</p>
+            
+            <div class="progress-container">
+                <div class="progress-text">Learning Progress</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text"><span id="progressPercent">8%</span> Complete</div>
+            </div>
+        </header>
+        
+        <div class="content-area">
+            <div class="concepts-panel">
+                <h2><i class="fas fa-graduation-cap"></i> JavaScript Concepts</h2>
+                <div class="concepts-grid">
+                    <div class="concept-card active" onclick="showConcept('variables')">
+                        
+                        <h3><i class="fas fa-tag"></i> Variables</h3>
+                        <p>Containers for storing data values. Learn about <code>let</code>, <code>const</code>, and <code>var</code> with examples.</p>
+                        <span class="level level-beginner">Beginner</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('dataTypes')">
+                        <h3><i class="fas fa-list"></i> Data Types</h3>
+                        <p>JavaScript's dynamic typing system. Explore primitives, objects, and type conversion.</p>
+                        <span class="level level-beginner">Beginner</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('arrays')">
+                        <h3><i class="fas fa-layer-group"></i> Arrays</h3>
+                        <p>Ordered collections of values. Learn creation, manipulation, and iteration techniques.</p>
+                        <span class="level level-beginner">Beginner</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('objects')">
+                        <h3><i class="fas fa-cube"></i> Objects</h3>
+                        <p>Key-value pairs for structured data. Explore properties, methods, and object-oriented concepts.</p>
+                        <span class="level level-beginner">Beginner</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('functions')">
+                        <h3><i class="fas fa-cogs"></i> Functions</h3>
+                        <p>Reusable blocks of code. Learn declaration, parameters, and return values.</p>
+                        <span class="level level-beginner">Beginner</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('parameters')">
+                        <h3><i class="fas fa-expand-arrows-alt"></i> Parameters & Spread/Rest</h3>
+                        <p>Function parameters, default values, and the powerful spread/rest operators.</p>
+                        <span class="level level-intermediate">Intermediate</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('return')">
+                        <h3><i class="fas fa-reply"></i> Return Statements</h3>
+                        <p>How functions return values and control flow. Early returns and multiple return points.</p>
+                        <span class="level level-beginner">Beginner</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('loops')">
+                        <h3><i class="fas fa-redo"></i> Loops</h3>
+                        <p>Iteration constructs: for, while, do-while, and modern for...of and for...in loops.</p>
+                        <span class="level level-beginner">Beginner</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('closure')">
+                        <h3><i class="fas fa-lock"></i> Closures</h3>
+                        <p>Functions that remember their lexical scope. Powerful for data privacy and function factories.</p>
+                        <span class="level level-advanced">Advanced</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('callback')">
+                        <h3><i class="fas fa-phone"></i> Callbacks</h3>
+                        <p>Functions passed as arguments. Essential for asynchronous operations and event handling.</p>
+                        <span class="level level-intermediate">Intermediate</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('arrayMethods')">
+                        <h3><i class="fas fa-tools"></i> Array Methods</h3>
+                        <p>Powerful built-in methods like map, filter, reduce, and more for array manipulation.</p>
+                        <span class="level level-intermediate">Intermediate</span>
+                    </div>
+                    
+                    <div class="concept-card" onclick="showConcept('es6')">
+                        <h3><i class="fas fa-bolt"></i> ES6+ Features</h3>
+                        <p>Modern JavaScript: arrow functions, classes, destructuring, template literals, and more.</p>
+                        <span class="level level-intermediate">Intermediate</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-panel">
+                <div class="code-header">
+                    <h2><i class="fas fa-code"></i> Code Example</h2>
+                    <div class="concept-title" id="conceptTitle">Variables</div>
+                </div>
+                
+                <div class="code-block" id="codeBlock">
+                    <code>
+<span class="comment">// Variable Declaration and Types</span>
+<span class="keyword">let</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">"John"</span>;
+<span class="keyword">const</span> <span class="variable">age</span> <span class="operator">=</span> <span class="number">30</span>;
+<span class="keyword">var</span> <span class="variable">isStudent</span> <span class="operator">=</span> <span class="keyword">true</span>;
+
+<span class="comment">// Output variables</span>
+console.<span class="function">log</span>(<span class="string">"Name:"</span>, <span class="variable">name</span>);
+console.<span class="function">log</span>(<span class="string">"Age:"</span>, <span class="variable">age</span>);
+console.<span class="function">log</span>(<span class="string">"Is Student:"</span>, <span class="variable">isStudent</span>);
+
+<span class="comment">// Variable reassignment (let allows this)</span>
+<span class="variable">name</span> <span class="operator">=</span> <span class="string">"Jane"</span>;
+console.<span class="function">log</span>(<span class="string">"Updated Name:"</span>, <span class="variable">name</span>);
+
+<span class="comment">// Constants cannot be reassigned</span>
+<span class="comment">// age = 31; // This would cause an error</span>
+                    </code>
+                </div>
+                
+                <div class="output-section">
+                    <h3><i class="fas fa-terminal"></i> Output</h3>
+                    <div id="output">Click "Run Code" to see the output here...</div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-run" onclick="runCode()"><i class="fas fa-play"></i> Run Code</button>
+                    <button class="btn btn-clear" onclick="clearOutput()"><i class="fas fa-broom"></i> Clear Output</button>
+                    <button class="btn btn-explain" onclick="showExplanation()"><i class="fas fa-lightbulb"></i> Show Explanation</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation-panel">
+            <h2><i class="fas fa-info-circle"></i> Concept Explanation</h2>
+            <div id="explanation">
+                <p>Select a concept and click "Show Explanation" to see detailed information here.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>JavaScript Learning Playground &copy; 2023 | Practice and explore JavaScript concepts interactively</p>
+        </footer>
+    </div>
+
+    <script>
+        // Current concept state
+        let currentConcept = 'variables';
+        let learnedConcepts = new Set(['variables']);
+        const totalConcepts = 12;
+        
+        // DOM elements
+        const outputElement = document.getElementById('output');
+        const codeBlockElement = document.getElementById('codeBlock');
+        const conceptTitleElement = document.getElementById('conceptTitle');
+        const explanationElement = document.getElementById('explanation');
+        const progressFillElement = document.getElementById('progressFill');
+        const progressPercentElement = document.getElementById('progressPercent');
+        
+        // Update progress indicator
+        function updateProgress() {
+            const progress = (learnedConcepts.size / totalConcepts) * 100;
+            progressFillElement.style.width = `${progress}%`;
+            progressPercentElement.textContent = `${Math.round(progress)}%`;
+        }
+        
+        // Show concept code and info
+        function showConcept(concept) {
+            // Update active card
+            document.querySelectorAll('.concept-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Mark as learned if not already
+            if (!learnedConcepts.has(concept)) {
+                learnedConcepts.add(concept);
+                updateProgress();
+            }
+            
+            currentConcept = concept;
+            let code = '';
+            let title = '';
+            
+            switch(concept) {
+                case 'variables':
+                    title = 'Variables';
+                    code = `<span class="comment">// Variable Declaration and Types</span>
+<span class="keyword">let</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">"John"</span>;
+<span class="keyword">const</span> <span class="variable">age</span> <span class="operator">=</span> <span class="number">30</span>;
+<span class="keyword">var</span> <span class="variable">isStudent</span> <span class="operator">=</span> <span class="keyword">true</span>;
+
+<span class="comment">// Output variables</span>
+console.<span class="function">log</span>(<span class="string">"Name:"</span>, <span class="variable">name</span>);
+console.<span class="function">log</span>(<span class="string">"Age:"</span>, <span class="variable">age</span>);
+console.<span class="function">log</span>(<span class="string">"Is Student:"</span>, <span class="variable">isStudent</span>);
+
+<span class="comment">// Variable reassignment (let allows this)</span>
+<span class="variable">name</span> <span class="operator">=</span> <span class="string">"Jane"</span>;
+console.<span class="function">log</span>(<span class="string">"Updated Name:"</span>, <span class="variable">name</span>);
+
+<span class="comment">// Constants cannot be reassigned</span>
+<span class="comment">// age = 31; // This would cause an error</span>`;
+                    break;
+                    
+                case 'dataTypes':
+                    title = 'Data Types';
+                    code = `<span class="comment">// Primitive Data Types</span>
+<span class="keyword">let</span> <span class="variable">string</span> <span class="operator">=</span> <span class="string">"Hello World"</span>;
+<span class="keyword">let</span> <span class="variable">number</span> <span class="operator">=</span> <span class="number">42</span>;
+<span class="keyword">let</span> <span class="variable">boolean</span> <span class="operator">=</span> <span class="keyword">true</span>;
+<span class="keyword">let</span> <span class="variable">nullValue</span> <span class="operator">=</span> <span class="keyword">null</span>;
+<span class="keyword">let</span> <span class="variable">undefinedValue</span>;
+<span class="keyword">let</span> <span class="variable">symbol</span> <span class="operator">=</span> <span class="function">Symbol</span>(<span class="string">'id'</span>);
+
+<span class="comment">// Output types</span>
+console.<span class="function">log</span>(<span class="string">"String:"</span>, <span class="variable">string</span>, <span class="string">"Type:"</span>, <span class="keyword">typeof</span> <span class="variable">string</span>);
+console.<span class="function">log</span>(<span class="string">"Number:"</span>, <span class="variable">number</span>, <span class="string">"Type:"</span>, <span class="keyword">typeof</span> <span class="variable">number</span>);
+console.<span class="function">log</span>(<span class="string">"Boolean:"</span>, <span class="variable">boolean</span>, <span class="string">"Type:"</span>, <span class="keyword">typeof</span> <span class="variable">boolean</span>);
+console.<span class="function">log</span>(<span class="string">"Null:"</span>, <span class="variable">nullValue</span>, <span class="string">"Type:"</span>, <span class="keyword">typeof</span> <span class="variable">nullValue</span>);
+console.<span class="function">log</span>(<span class="string">"Undefined:"</span>, <span class="variable">undefinedValue</span>, <span class="string">"Type:"</span>, <span class="keyword">typeof</span> <span class="variable">undefinedValue</span>);
+
+<span class="comment">// Reference Types</span>
+<span class="keyword">let</span> <span class="variable">array</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">let</span> <span class="variable">object</span> <span class="operator">=</span> { <span class="function">key</span>: <span class="string">"value"</span> };
+<span class="keyword">let</span> <span class="variable">functionType</span> <span class="operator">=</span> <span class="keyword">function</span>() {};
+
+console.<span class="function">log</span>(<span class="string">"Array:"</span>, <span class="variable">array</span>, <span class="string">"Type:"</span>, <span class="keyword">typeof</span> <span class="variable">array</span>);
+console.<span class="function">log</span>(<span class="string">"Object:"</span>, <span class="variable">object</span>, <span class="string">"Type:"</span>, <span class="keyword">typeof</span> <span class="variable">object</span>);
+console.<span class="function">log</span>(<span class="string">"Function:"</span>, <span class="variable">functionType</span>, <span class="string">"Type:"</span>, <span class="keyword">typeof</span> <span class="variable">functionType</span>);`;
+                    break;
+                    
+                case 'arrays':
+                    title = 'Arrays';
+                    code = `<span class="comment">// Array Declaration</span>
+<span class="keyword">let</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">"Apple"</span>, <span class="string">"Banana"</span>, <span class="string">"Orange"</span>];
+<span class="keyword">let</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+<span class="keyword">let</span> <span class="variable">mixed</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="string">"two"</span>, <span class="keyword">true</span>, <span class="keyword">null</span>];
+
+<span class="comment">// Access array elements</span>
+console.<span class="function">log</span>(<span class="string">"First fruit:"</span>, <span class="variable">fruits</span>[<span class="number">0</span>]);
+console.<span class="function">log</span>(<span class="string">"Array length:"</span>, <span class="variable">numbers</span>.<span class="function">length</span>);
+
+<span class="comment">// Array methods</span>
+<span class="variable">fruits</span>.<span class="function">push</span>(<span class="string">"Grapes"</span>); <span class="comment">// Add to end</span>
+console.<span class="function">log</span>(<span class="string">"After push:"</span>, <span class="variable">fruits</span>);
+
+<span class="variable">fruits</span>.<span class="function">pop</span>(); <span class="comment">// Remove from end</span>
+console.<span class="function">log</span>(<span class="string">"After pop:"</span>, <span class="variable">fruits</span>);
+
+<span class="variable">fruits</span>.<span class="function">unshift</span>(<span class="string">"Strawberry"</span>); <span class="comment">// Add to beginning</span>
+console.<span class="function">log</span>(<span class="string">"After unshift:"</span>, <span class="variable">fruits</span>);
+
+<span class="variable">fruits</span>.<span class="function">shift</span>(); <span class="comment">// Remove from beginning</span>
+console.<span class="function">log</span>(<span class="string">"After shift:"</span>, <span class="variable">fruits</span>);
+
+<span class="comment">// Iterating through arrays</span>
+console.<span class="function">log</span>(<span class="string">"All fruits:"</span>);
+<span class="variable">fruits</span>.<span class="function">forEach</span>(<span class="function">fruit</span> <span class="operator">=></span> console.<span class="function">log</span>(<span class="variable">fruit</span>));`;
+                    break;
+                    
+                case 'objects':
+                    title = 'Objects';
+                    code = `<span class="comment">// Object Declaration</span>
+<span class="keyword">let</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="function">name</span>: <span class="string">"Alice"</span>,
+  <span class="function">age</span>: <span class="number">25</span>,
+  <span class="function">isStudent</span>: <span class="keyword">false</span>,
+  <span class="function">hobbies</span>: [<span class="string">"reading"</span>, <span class="string">"coding"</span>, <span class="string">"gaming"</span>],
+  <span class="function">address</span>: {
+    <span class="function">street</span>: <span class="string">"123 Main St"</span>,
+    <span class="function">city</span>: <span class="string">"Boston"</span>
+  },
+  <span class="function">greet</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="string">"Hello, my name is "</span> <span class="operator">+</span> <span class="keyword">this</span>.<span class="variable">name</span>;
+  }
+};
+
+<span class="comment">// Access object properties</span>
+console.<span class="function">log</span>(<span class="string">"Name:"</span>, <span class="variable">person</span>.<span class="variable">name</span>);
+console.<span class="function">log</span>(<span class="string">"Age:"</span>, <span class="variable">person</span>[<span class="string">"age"</span>]);
+console.<span class="function">log</span>(<span class="string">"First hobby:"</span>, <span class="variable">person</span>.<span class="variable">hobbies</span>[<span class="number">0</span>]);
+console.<span class="function">log</span>(<span class="string">"City:"</span>, <span class="variable">person</span>.<span class="variable">address</span>.<span class="variable">city</span>);
+console.<span class="function">log</span>(<span class="string">"Greeting:"</span>, <span class="variable">person</span>.<span class="function">greet</span>());
+
+<span class="comment">// Adding new properties</span>
+<span class="variable">person</span>.<span class="variable">email</span> <span class="operator">=</span> <span class="string">"alice@example.com"</span>;
+console.<span class="function">log</span>(<span class="string">"Email:"</span>, <span class="variable">person</span>.<span class="variable">email</span>);
+
+<span class="comment">// Object methods</span>
+console.<span class="function">log</span>(<span class="string">"Keys:"</span>, Object.<span class="function">keys</span>(<span class="variable">person</span>));
+console.<span class="function">log</span>(<span class="string">"Values:"</span>, Object.<span class="function">values</span>(<span class="variable">person</span>));`;
+                    break;
+                    
+                case 'functions':
+                    title = 'Functions';
+                    code = `<span class="comment">// Function Declaration</span>
+<span class="keyword">function</span> <span class="function">greet</span>(<span class="variable">name</span>) {
+  <span class="keyword">return</span> <span class="string">"Hello, "</span> <span class="operator">+</span> <span class="variable">name</span> <span class="operator">+</span> <span class="string">"!"</span>;
+}
+
+<span class="comment">// Function Expression</span>
+<span class="keyword">const</span> <span class="variable">square</span> <span class="operator">=</span> <span class="keyword">function</span>(<span class="variable">x</span>) {
+  <span class="keyword">return</span> <span class="variable">x</span> <span class="operator">*</span> <span class="variable">x</span>;
+};
+
+<span class="comment">// Arrow Function (ES6+)</span>
+<span class="keyword">const</span> <span class="variable">cube</span> <span class="operator">=</span> (<span class="variable">x</span>) <span class="operator">=></span> <span class="variable">x</span> <span class="operator">*</span> <span class="variable">x</span> <span class="operator">*</span> <span class="variable">x</span>;
+
+<span class="comment">// Function Calls</span>
+<span class="keyword">let</span> <span class="variable">message</span> <span class="operator">=</span> <span class="function">greet</span>(<span class="string">"Sarah"</span>);
+<span class="keyword">let</span> <span class="variable">squared</span> <span class="operator">=</span> <span class="function">square</span>(<span class="number">5</span>);
+<span class="keyword">let</span> <span class="variable">cubed</span> <span class="operator">=</span> <span class="function">cube</span>(<span class="number">3</span>);
+
+console.<span class="function">log</span>(<span class="variable">message</span>); <span class="comment">// Hello, Sarah!</span>
+console.<span class="function">log</span>(<span class="string">"5 squared:"</span>, <span class="variable">squared</span>); <span class="comment">// 25</span>
+console.<span class="function">log</span>(<span class="string">"3 cubed:"</span>, <span class="variable">cubed</span>); <span class="comment">// 27</span>
+
+<span class="comment">// Higher-order function</span>
+<span class="keyword">function</span> <span class="function">applyOperation</span>(<span class="variable">x</span>, <span class="variable">operation</span>) {
+  <span class="keyword">return</span> <span class="function">operation</span>(<span class="variable">x</span>);
+}
+
+<span class="keyword">let</span> <span class="variable">result</span> <span class="operator">=</span> <span class="function">applyOperation</span>(<span class="number">4</span>, <span class="variable">square</span>);
+console.<span class="function">log</span>(<span class="string">"Applied operation:"</span>, <span class="variable">result</span>); <span class="comment">// 16</span>`;
+                    break;
+                    
+                case 'parameters':
+                    title = 'Parameters & Spread/Rest';
+                    code = `<span class="comment">// Regular Parameters</span>
+<span class="keyword">function</span> <span class="function">multiply</span>(<span class="variable">a</span>, <span class="variable">b</span>) {
+  <span class="keyword">return</span> <span class="variable">a</span> <span class="operator">*</span> <span class="variable">b</span>;
+}
+
+console.<span class="function">log</span>(<span class="string">"Multiply:"</span>, <span class="function">multiply</span>(<span class="number">5</span>, <span class="number">3</span>)); <span class="comment">// 15</span>
+
+<span class="comment">// Default Parameters</span>
+<span class="keyword">function</span> <span class="function">greet</span>(<span class="variable">name</span> <span class="operator">=</span> <span class="string">"Guest"</span>) {
+  <span class="keyword">return</span> <span class="string">"Hello, "</span> <span class="operator">+</span> <span class="variable">name</span>;
+}
+
+console.<span class="function">log</span>(<span class="string">"Default param:"</span>, <span class="function">greet</span>()); <span class="comment">// Hello, Guest</span>
+console.<span class="function">log</span>(<span class="string">"With param:"</span>, <span class="function">greet</span>(<span class="string">"John"</span>)); <span class="comment">// Hello, John</span>
+
+<span class="comment">// Rest Parameters</span>
+<span class="keyword">function</span> <span class="function">sum</span>(...<span class="variable">numbers</span>) {
+  <span class="keyword">return</span> <span class="variable">numbers</span>.<span class="function">reduce</span>((<span class="variable">acc</span>, <span class="variable">val</span>) <span class="operator">=></span> <span class="variable">acc</span> <span class="operator">+</span> <span class="variable">val</span>, <span class="number">0</span>);
+}
+
+console.<span class="function">log</span>(<span class="string">"Sum:"</span>, <span class="function">sum</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)); <span class="comment">// 10</span>
+console.<span class="function">log</span>(<span class="string">"Sum:"</span>, <span class="function">sum</span>(<span class="number">10</span>, <span class="number">20</span>)); <span class="comment">// 30</span>
+
+<span class="comment">// Spread Operator</span>
+<span class="keyword">let</span> <span class="variable">arr1</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">let</span> <span class="variable">arr2</span> <span class="operator">=</span> [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];
+<span class="keyword">let</span> <span class="variable">combined</span> <span class="operator">=</span> [...<span class="variable">arr1</span>, ...<span class="variable">arr2</span>];
+console.<span class="function">log</span>(<span class="string">"Combined array:"</span>, <span class="variable">combined</span>); <span class="comment">// [1, 2, 3, 4, 5, 6]</span>
+
+<span class="comment">// Spread with objects</span>
+<span class="keyword">let</span> <span class="variable">obj1</span> <span class="operator">=</span> { <span class="function">a</span>: <span class="number">1</span>, <span class="function">b</span>: <span class="number">2</span> };
+<span class="keyword">let</span> <span class="variable">obj2</span> <span class="operator">=</span> { <span class="function">c</span>: <span class="number">3</span>, <span class="function">d</span>: <span class="number">4</span> };
+<span class="keyword">let</span> <span class="variable">merged</span> <span class="operator">=</span> { ...<span class="variable">obj1</span>, ...<span class="variable">obj2</span> };
+console.<span class="function">log</span>(<span class="string">"Merged object:"</span>, <span class="variable">merged</span>); <span class="comment">// {a: 1, b: 2, c: 3, d: 4}</span>`;
+                    break;
+                    
+                case 'return':
+                    title = 'Return Statements';
+                    code = `<span class="comment">// Function with return</span>
+<span class="keyword">function</span> <span class="function">multiply</span>(<span class="variable">a</span>, <span class="variable">b</span>) {
+  <span class="keyword">return</span> <span class="variable">a</span> <span class="operator">*</span> <span class="variable">b</span>;
+}
+
+<span class="comment">// Using the returned value</span>
+<span class="keyword">let</span> <span class="variable">result</span> <span class="operator">=</span> <span class="function">multiply</span>(<span class="number">5</span>, <span class="number">3</span>);
+console.<span class="function">log</span>(<span class="string">"Multiplication result:"</span>, <span class="variable">result</span>); <span class="comment">// 15</span>
+
+<span class="comment">// Function without return</span>
+<span class="keyword">function</span> <span class="function">sayHello</span>(<span class="variable">name</span>) {
+  console.<span class="function">log</span>(<span class="string">"Hello, "</span> <span class="operator">+</span> <span class="variable">name</span>);
+}
+
+<span class="keyword">let</span> <span class="variable">greeting</span> <span class="operator">=</span> <span class="function">sayHello</span>(<span class="string">"Tom"</span>);
+console.<span class="function">log</span>(<span class="string">"Return value of sayHello:"</span>, <span class="variable">greeting</span>); <span class="comment">// undefined</span>
+
+<span class="comment">// Multiple return points</span>
+<span class="keyword">function</span> <span class="function">checkNumber</span>(<span class="variable">num</span>) {
+  <span class="keyword">if</span> (<span class="variable">num</span> <span class="operator">></span> <span class="number">0</span>) {
+    <span class="keyword">return</span> <span class="string">"Positive"</span>;
+  } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable">num</span> <span class="operator"><</span> <span class="number">0</span>) {
+    <span class="keyword">return</span> <span class="string">"Negative"</span>;
+  } <span class="keyword">else</span> {
+    <span class="keyword">return</span> <span class="string">"Zero"</span>;
+  }
+}
+
+console.<span class="function">log</span>(<span class="string">"Check 5:"</span>, <span class="function">checkNumber</span>(<span class="number">5</span>)); <span class="comment">// Positive</span>
+console.<span class="function">log</span>(<span class="string">"Check -2:"</span>, <span class="function">checkNumber</span>(<span class="operator">-</span><span class="number">2</span>)); <span class="comment">// Negative</span>
+console.<span class="function">log</span>(<span class="string">"Check 0:"</span>, <span class="function">checkNumber</span>(<span class="number">0</span>)); <span class="comment">// Zero</span>`;
+                    break;
+                    
+                case 'loops':
+                    title = 'Loops';
+                    code = `<span class="comment">// For Loop</span>
+console.<span class="function">log</span>(<span class="string">"For Loop:"</span>);
+<span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">i</span> <span class="operator"><</span> <span class="number">5</span>; <span class="variable">i</span><span class="operator">++</span>) {
+  console.<span class="function">log</span>(<span class="string">"Iteration: "</span> <span class="operator">+</span> <span class="variable">i</span>);
+}
+
+<span class="comment">// While Loop</span>
+console.<span class="function">log</span>(<span class="string">"\\nWhile Loop:"</span>);
+<span class="keyword">let</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;
+<span class="keyword">while</span> (<span class="variable">count</span> <span class="operator"><</span> <span class="number">3</span>) {
+  console.<span class="function">log</span>(<span class="string">"Count: "</span> <span class="operator">+</span> <span class="variable">count</span>);
+  <span class="variable">count</span><span class="operator">++</span>;
+}
+
+<span class="comment">// Do-While Loop</span>
+console.<span class="function">log</span>(<span class="string">"\\nDo-While Loop:"</span>);
+<span class="keyword">let</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">0</span>;
+<span class="keyword">do</span> {
+  console.<span class="function">log</span>(<span class="string">"x: "</span> <span class="operator">+</span> <span class="variable">x</span>);
+  <span class="variable">x</span><span class="operator">++</span>;
+} <span class="keyword">while</span> (<span class="variable">x</span> <span class="operator"><</span> <span class="number">3</span>);
+
+<span class="comment">// For...of Loop (ES6+)</span>
+console.<span class="function">log</span>(<span class="string">"\\nFor...of Loop:"</span>);
+<span class="keyword">let</span> <span class="variable">colors</span> <span class="operator">=</span> [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];
+<span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">color</span> <span class="keyword">of</span> <span class="variable">colors</span>) {
+  console.<span class="function">log</span>(<span class="variable">color</span>);
+}
+
+<span class="comment">// For...in Loop (for objects)</span>
+console.<span class="function">log</span>(<span class="string">"\\nFor...in Loop:"</span>);
+<span class="keyword">let</span> <span class="variable">person</span> <span class="operator">=</span> { <span class="function">name</span>: <span class="string">"John"</span>, <span class="function">age</span>: <span class="number">30</span>, <span class="function">city</span>: <span class="string">"NYC"</span> };
+<span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">key</span> <span class="keyword">in</span> <span class="variable">person</span>) {
+  console.<span class="function">log</span>(<span class="variable">key</span> <span class="operator">+</span> <span class="string">": "</span> <span class="operator">+</span> <span class="variable">person</span>[<span class="variable">key</span>]);
+}`;
+                    break;
+                    
+                case 'closure':
+                    title = 'Closures';
+                    code = `<span class="comment">// Basic Closure</span>
+<span class="keyword">function</span> <span class="function">createCounter</span>() {
+  <span class="keyword">let</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;
+  <span class="keyword">return</span> <span class="keyword">function</span>() {
+    <span class="variable">count</span><span class="operator">++</span>;
+    <span class="keyword">return</span> <span class="variable">count</span>;
+  };
+}
+
+<span class="keyword">let</span> <span class="variable">counter</span> <span class="operator">=</span> <span class="function">createCounter</span>();
+console.<span class="function">log</span>(<span class="string">"Counter:"</span>, <span class="function">counter</span>()); <span class="comment">// 1</span>
+console.<span class="function">log</span>(<span class="string">"Counter:"</span>, <span class="function">counter</span>()); <span class="comment">// 2</span>
+console.<span class="function">log</span>(<span class="string">"Counter:"</span>, <span class="function">counter</span>()); <span class="comment">// 3</span>
+
+<span class="comment">// Each closure has its own state</span>
+<span class="keyword">let</span> <span class="variable">counter2</span> <span class="operator">=</span> <span class="function">createCounter</span>();
+console.<span class="function">log</span>(<span class="string">"Counter2:"</span>, <span class="function">counter2</span>()); <span class="comment">// 1</span>
+console.<span class="function">log</span>(<span class="string">"Counter2:"</span>, <span class="function">counter2</span>()); <span class="comment">// 2</span>
+
+<span class="comment">// Practical closure example</span>
+<span class="keyword">function</span> <span class="function">createMultiplier</span>(<span class="variable">multiplier</span>) {
+  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="variable">x</span>) {
+    <span class="keyword">return</span> <span class="variable">x</span> <span class="operator">*</span> <span class="variable">multiplier</span>;
+  };
+}
+
+<span class="keyword">let</span> <span class="variable">double</span> <span class="operator">=</span> <span class="function">createMultiplier</span>(<span class="number">2</span>);
+<span class="keyword">let</span> <span class="variable">triple</span> <span class="operator">=</span> <span class="function">createMultiplier</span>(<span class="number">3</span>);
+
+console.<span class="function">log</span>(<span class="string">"Double 5:"</span>, <span class="function">double</span>(<span class="number">5</span>)); <span class="comment">// 10</span>
+console.<span class="function">log</span>(<span class="string">"Triple 5:"</span>, <span class="function">triple</span>(<span class="number">5</span>)); <span class="comment">// 15</span>`;
+                    break;
+                    
+                case 'callback':
+                    title = 'Callbacks';
+                    code = `<span class="comment">// Synchronous Callback</span>
+<span class="keyword">function</span> <span class="function">processUserInput</span>(<span class="variable">callback</span>) {
+  <span class="keyword">let</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">"John Doe"</span>;
+  <span class="function">callback</span>(<span class="variable">name</span>);
+}
+
+<span class="keyword">function</span> <span class="function">greeting</span>(<span class="variable">name</span>) {
+  console.<span class="function">log</span>(<span class="string">"Hello, "</span> <span class="operator">+</span> <span class="variable">name</span>);
+}
+
+<span class="function">processUserInput</span>(<span class="variable">greeting</span>); <span class="comment">// Hello, John Doe</span>
+
+<span class="comment">// Callback with parameters</span>
+<span class="keyword">function</span> <span class="function">calculate</span>(<span class="variable">a</span>, <span class="variable">b</span>, <span class="variable">operation</span>) {
+  <span class="keyword">return</span> <span class="function">operation</span>(<span class="variable">a</span>, <span class="variable">b</span>);
+}
+
+<span class="keyword">function</span> <span class="function">add</span>(<span class="variable">x</span>, <span class="variable">y</span>) {
+  <span class="keyword">return</span> <span class="variable">x</span> <span class="operator">+</span> <span class="variable">y</span>;
+}
+
+<span class="keyword">function</span> <span class="function">multiply</span>(<span class="variable">x</span>, <span class="variable">y</span>) {
+  <span class="keyword">return</span> <span class="variable">x</span> <span class="operator">*</span> <span class="variable">y</span>;
+}
+
+console.<span class="function">log</span>(<span class="string">"Addition:"</span>, <span class="function">calculate</span>(<span class="number">5</span>, <span class="number">3</span>, <span class="variable">add</span>)); <span class="comment">// 8</span>
+console.<span class="function">log</span>(<span class="string">"Multiplication:"</span>, <span class="function">calculate</span>(<span class="number">5</span>, <span class="number">3</span>, <span class="variable">multiply</span>)); <span class="comment">// 15</span>
+
+<span class="comment">// Asynchronous callback with setTimeout</span>
+console.<span class="function">log</span>(<span class="string">"Starting timer..."</span>);
+setTimeout(<span class="keyword">function</span>() {
+  console.<span class="function">log</span>(<span class="string">"This runs after 1 second"</span>);
+}, <span class="number">1000</span>);`;
+                    break;
+                    
+                case 'arrayMethods':
+                    title = 'Array Methods';
+                    code = `<span class="keyword">let</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+<span class="keyword">let</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"orange"</span>, <span class="string">"kiwi"</span>];
+
+<span class="comment">// map() - creates new array by transforming each element</span>
+<span class="keyword">let</span> <span class="variable">doubled</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">map</span>(<span class="variable">num</span> <span class="operator">=></span> <span class="variable">num</span> <span class="operator">*</span> <span class="number">2</span>);
+console.<span class="function">log</span>(<span class="string">"Original:"</span>, <span class="variable">numbers</span>);
+console.<span class="function">log</span>(<span class="string">"Doubled:"</span>, <span class="variable">doubled</span>);
+
+<span class="comment">// filter() - creates new array with elements that pass a test</span>
+<span class="keyword">let</span> <span class="variable">evens</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">filter</span>(<span class="variable">num</span> <span class="operator">=></span> <span class="variable">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">===</span> <span class="number">0</span>);
+console.<span class="function">log</span>(<span class="string">"Evens:"</span>, <span class="variable">evens</span>);
+
+<span class="comment">// reduce() - reduces array to single value</span>
+<span class="keyword">let</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">reduce</span>((<span class="variable">acc</span>, <span class="variable">num</span>) <span class="operator">=></span> <span class="variable">acc</span> <span class="operator">+</span> <span class="variable">num</span>, <span class="number">0</span>);
+console.<span class="function">log</span>(<span class="string">"Sum:"</span>, <span class="variable">sum</span>);
+
+<span class="comment">// find() - returns first element that satisfies condition</span>
+<span class="keyword">let</span> <span class="variable">firstEven</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">find</span>(<span class="variable">num</span> <span class="operator">=></span> <span class="variable">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">===</span> <span class="number">0</span>);
+console.<span class="function">log</span>(<span class="string">"First even:"</span>, <span class="variable">firstEven</span>);
+
+<span class="comment">// some() - tests whether at least one element passes the test</span>
+<span class="keyword">let</span> <span class="variable">hasEven</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">some</span>(<span class="variable">num</span> <span class="operator">=></span> <span class="variable">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">===</span> <span class="number">0</span>);
+console.<span class="function">log</span>(<span class="string">"Has even:"</span>, <span class="variable">hasEven</span>);
+
+<span class="comment">// forEach() - executes a function for each element</span>
+console.<span class="function">log</span>(<span class="string">"Fruits:"</span>);
+<span class="variable">fruits</span>.<span class="function">forEach</span>(<span class="variable">fruit</span> <span class="operator">=></span> console.<span class="function">log</span>(<span class="variable">fruit</span>));`;
+                    break;
+                    
+                case 'es6':
+                    title = 'ES6+ Features';
+                    code = `<span class="comment">// Arrow Functions</span>
+<span class="keyword">const</span> <span class="variable">add</span> <span class="operator">=</span> (<span class="variable">a</span>, <span class="variable">b</span>) <span class="operator">=></span> <span class="variable">a</span> <span class="operator">+</span> <span class="variable">b</span>;
+<span class="keyword">const</span> <span class="variable">square</span> <span class="operator">=</span> <span class="variable">x</span> <span class="operator">=></span> <span class="variable">x</span> <span class="operator">*</span> <span class="variable">x</span>;
+
+console.<span class="function">log</span>(<span class="string">"Add:"</span>, <span class="function">add</span>(<span class="number">5</span>, <span class="number">3</span>)); <span class="comment">// 8</span>
+console.<span class="function">log</span>(<span class="string">"Square:"</span>, <span class="function">square</span>(<span class="number">4</span>)); <span class="comment">// 16</span>
+
+<span class="comment">// Template Literals</span>
+<span class="keyword">let</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">"Alice"</span>;
+<span class="keyword">let</span> <span class="variable">age</span> <span class="operator">=</span> <span class="number">25</span>;
+console.<span class="function">log</span>(<span class="string">\`Hello, my name is \${<span class="variable">name</span>} and I'm \${<span class="variable">age</span>} years old.\`</span>);
+
+<span class="comment">// Destructuring</span>
+<span class="comment">// Array destructuring</span>
+<span class="keyword">let</span> [<span class="variable">first</span>, <span class="variable">second</span>, ...<span class="variable">rest</span>] <span class="operator">=</span> [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>];
+console.<span class="function">log</span>(<span class="string">"First:"</span>, <span class="variable">first</span>); <span class="comment">// 10</span>
+console.<span class="function">log</span>(<span class="string">"Second:"</span>, <span class="variable">second</span>); <span class="comment">// 20</span>
+console.<span class="function">log</span>(<span class="string">"Rest:"</span>, <span class="variable">rest</span>); <span class="comment">// [30, 40, 50]</span>
+
+<span class="comment">// Object destructuring</span>
+<span class="keyword">let</span> <span class="variable">person</span> <span class="operator">=</span> { <span class="function">name</span>: <span class="string">"John"</span>, <span class="function">age</span>: <span class="number">30</span>, <span class="function">city</span>: <span class="string">"NYC"</span> };
+<span class="keyword">let</span> { <span class="variable">name</span>: <span class="variable">personName</span>, <span class="variable">city</span> } <span class="operator">=</span> <span class="variable">person</span>;
+console.<span class="function">log</span>(<span class="string">"Name:"</span>, <span class="variable">personName</span>); <span class="comment">// John</span>
+console.<span class="function">log</span>(<span class="string">"City:"</span>, <span class="variable">city</span>); <span class="comment">// NYC</span>
+
+<span class="comment">// Spread Operator</span>
+<span class="keyword">let</span> <span class="variable">arr1</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">let</span> <span class="variable">arr2</span> <span class="operator">=</span> [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];
+<span class="keyword">let</span> <span class="variable">combined</span> <span class="operator">=</span> [...<span class="variable">arr1</span>, ...<span class="variable">arr2</span>];
+console.<span class="function">log</span>(<span class="string">"Combined:"</span>, <span class="variable">combined</span>); <span class="comment">// [1, 2, 3, 4, 5, 6]</span>
+
+<span class="comment">// Classes</span>
+<span class="keyword">class</span> <span class="class-name">Person</span> {
+  <span class="function">constructor</span>(<span class="variable">name</span>, <span class="variable">age</span>) {
+    <span class="keyword">this</span>.<span class="variable">name</span> <span class="operator">=</span> <span class="variable">name</span>;
+    <span class="keyword">this</span>.<span class="variable">age</span> <span class="operator">=</span> <span class="variable">age</span>;
+  }
+  
+  <span class="function">greet</span>() {
+    <span class="keyword">return</span> <span class="string">\`Hello, I'm \${<span class="keyword">this</span>.<span class="variable">name</span>} and I'm \${<span class="keyword">this</span>.<span class="variable">age</span>} years old.\`</span>;
+  }
+}
+
+<span class="keyword">let</span> <span class="variable">john</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class-name">Person</span>(<span class="string">"John"</span>, <span class="number">30</span>);
+console.<span class="function">log</span>(<span class="variable">john</span>.<span class="function">greet</span>()); <span class="comment">// Hello, I'm John and I'm 30 years old.</span>`;
+                    break;
+                    
+                default:
+                    title = 'Concept';
+                    code = `<span class="comment">// Code example for ${concept}</span>
+console.<span class="function">log</span>(<span class="string">"Example code for"</span>, <span class="string">"${concept}"</span>);`;
+            }
+            
+            conceptTitleElement.textContent = title;
+            codeBlockElement.innerHTML = code;
+            outputElement.textContent = 'Click "Run Code" to see the output here...';
+            explanationElement.innerHTML = '<p>Select a concept and click "Show Explanation" to see detailed information here.</p>';
+        }
+        
+        // Run the code example
+        function runCode() {
+            let code = '';
+            
+            switch(currentConcept) {
+                case 'variables':
+                    code = `// Variable Declaration and Types
+let name = "John";
+const age = 30;
+var isStudent = true;
+
+// Output variables
+console.log("Name:", name);
+console.log("Age:", age);
+console.log("Is Student:", isStudent);
+
+// Variable reassignment (let allows this)
+name = "Jane";
+console.log("Updated Name:", name);`;
+                    break;
+                    
+                case 'dataTypes':
+                    code = `// Primitive Data Types
+let string = "Hello World";
+let number = 42;
+let boolean = true;
+let nullValue = null;
+let undefinedValue;
+
+// Output types
+console.log("String:", string, "Type:", typeof string);
+console.log("Number:", number, "Type:", typeof number);
+console.log("Boolean:", boolean, "Type:", typeof boolean);
+console.log("Null:", nullValue, "Type:", typeof nullValue);
+console.log("Undefined:", undefinedValue, "Type:", typeof undefinedValue);
+
+// Reference Types
+let array = [1, 2, 3];
+let object = { key: "value" };
+let functionType = function() {};
+
+console.log("Array:", array, "Type:", typeof array);
+console.log("Object:", object, "Type:", typeof object);
+console.log("Function:", functionType, "Type:", typeof functionType);`;
+                    break;
+                    
+                case 'arrays':
+                    code = `// Array Declaration
+let fruits = ["Apple", "Banana", "Orange"];
+let numbers = [1, 2, 3, 4, 5];
+
+// Access array elements
+console.log("First fruit:", fruits[0]);
+console.log("Array length:", numbers.length);
+
+// Array methods
+fruits.push("Grapes"); // Add to end
+console.log("After push:", fruits);
+
+fruits.pop(); // Remove from end
+console.log("After pop:", fruits);
+
+// Iterating through arrays
+console.log("All fruits:");
+fruits.forEach(fruit => console.log(fruit));`;
+                    break;
+                    
+                case 'objects':
+                    code = `// Object Declaration
+let person = {
+  name: "Alice",
+  age: 25,
+  isStudent: false,
+  hobbies: ["reading", "coding", "gaming"],
+  address: {
+    street: "123 Main St",
+    city: "Boston"
+  },
+  greet: function() {
+    return "Hello, my name is " + this.name;
+  }
+};
+
+// Access object properties
+console.log("Name:", person.name);
+console.log("Age:", person["age"]);
+console.log("First hobby:", person.hobbies[0]);
+console.log("City:", person.address.city);
+console.log("Greeting:", person.greet());
+
+// Adding new properties
+person.email = "alice@example.com";
+console.log("Email:", person.email);
+
+// Object methods
+console.log("Keys:", Object.keys(person));
+console.log("Values:", Object.values(person));`;
+                    break;
+                    
+                case 'functions':
+                    code = `// Function Declaration
+function greet(name) {
+  return "Hello, " + name + "!";
+}
+
+// Function Expression
+const square = function(x) {
+  return x * x;
+};
+
+// Arrow Function (ES6+)
+const cube = (x) => x * x * x;
+
+// Function Calls
+let message = greet("Sarah");
+let squared = square(5);
+let cubed = cube(3);
+
+console.log(message); // Hello, Sarah!
+console.log("5 squared:", squared); // 25
+console.log("3 cubed:", cubed); // 27
+
+// Higher-order function
+function applyOperation(x, operation) {
+  return operation(x);
+}
+
+let result = applyOperation(4, square);
+console.log("Applied operation:", result); // 16`;
+                    break;
+                    
+                case 'parameters':
+                    code = `// Regular Parameters
+function multiply(a, b) {
+  return a * b;
+}
+
+console.log("Multiply:", multiply(5, 3)); // 15
+
+// Default Parameters
+function greet(name = "Guest") {
+  return "Hello, " + name;
+}
+
+console.log("Default param:", greet()); // Hello, Guest
+console.log("With param:", greet("John")); // Hello, John
+
+// Rest Parameters
+function sum(...numbers) {
+  return numbers.reduce((acc, val) => acc + val, 0);
+}
+
+console.log("Sum:", sum(1, 2, 3, 4)); // 10
+console.log("Sum:", sum(10, 20)); // 30
+
+// Spread Operator
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combined = [...arr1, ...arr2];
+console.log("Combined array:", combined); // [1, 2, 3, 4, 5, 6]
+
+// Spread with objects
+let obj1 = { a: 1, b: 2 };
+let obj2 = { c: 3, d: 4 };
+let merged = { ...obj1, ...obj2 };
+console.log("Merged object:", merged); // {a: 1, b: 2, c: 3, d: 4}`;
+                    break;
+                    
+                case 'return':
+                    code = `// Function with return
+function multiply(a, b) {
+  return a * b;
+}
+
+// Using the returned value
+let result = multiply(5, 3);
+console.log("Multiplication result:", result); // 15
+
+// Function without return
+function sayHello(name) {
+  console.log("Hello, " + name);
+}
+
+let greeting = sayHello("Tom");
+console.log("Return value of sayHello:", greeting); // undefined
+
+// Multiple return points
+function checkNumber(num) {
+  if (num > 0) {
+    return "Positive";
+  } else if (num < 0) {
+    return "Negative";
+  } else {
+    return "Zero";
+  }
+}
+
+console.log("Check 5:", checkNumber(5)); // Positive
+console.log("Check -2:", checkNumber(-2)); // Negative
+console.log("Check 0:", checkNumber(0)); // Zero`;
+                    break;
+                    
+                case 'loops':
+                    code = `// For Loop
+console.log("For Loop:");
+for (let i = 0; i < 5; i++) {
+  console.log("Iteration: " + i);
+}
+
+// While Loop
+console.log("\\nWhile Loop:");
+let count = 0;
+while (count < 3) {
+  console.log("Count: " + count);
+  count++;
+}
+
+// Do-While Loop
+console.log("\\nDo-While Loop:");
+let x = 0;
+do {
+  console.log("x: " + x);
+  x++;
+} while (x < 3);
+
+// For...of Loop (ES6+)
+console.log("\\nFor...of Loop:");
+let colors = ["red", "green", "blue"];
+for (let color of colors) {
+  console.log(color);
+}
+
+// For...in Loop (for objects)
+console.log("\\nFor...in Loop:");
+let person = { name: "John", age: 30, city: "NYC" };
+for (let key in person) {
+  console.log(key + ": " + person[key]);
+}`;
+                    break;
+                    
+                case 'closure':
+                    code = `// Basic Closure
+function createCounter() {
+  let count = 0;
+  return function() {
+    count++;
+    return count;
+  };
+}
+
+let counter = createCounter();
+console.log("Counter:", counter()); // 1
+console.log("Counter:", counter()); // 2
+console.log("Counter:", counter()); // 3
+
+// Each closure has its own state
+let counter2 = createCounter();
+console.log("Counter2:", counter2()); // 1
+console.log("Counter2:", counter2()); // 2
+
+// Practical closure example
+function createMultiplier(multiplier) {
+  return function(x) {
+    return x * multiplier;
+  };
+}
+
+let double = createMultiplier(2);
+let triple = createMultiplier(3);
+
+console.log("Double 5:", double(5)); // 10
+console.log("Triple 5:", triple(5)); // 15`;
+                    break;
+                    
+                case 'callback':
+                    code = `// Synchronous Callback
+function processUserInput(callback) {
+  let name = "John Doe";
+  callback(name);
+}
+
+function greeting(name) {
+  console.log("Hello, " + name);
+}
+
+processUserInput(greeting); // Hello, John Doe
+
+// Callback with parameters
+function calculate(a, b, operation) {
+  return operation(a, b);
+}
+
+function add(x, y) {
+  return x + y;
+}
+
+function multiply(x, y) {
+  return x * y;
+}
+
+console.log("Addition:", calculate(5, 3, add)); // 8
+console.log("Multiplication:", calculate(5, 3, multiply)); // 15
+
+// Asynchronous callback with setTimeout
+console.log("Starting timer...");
+setTimeout(function() {
+  console.log("This runs after 1 second");
+}, 1000);`;
+                    break;
+                    
+                case 'arrayMethods':
+                    code = `let numbers = [1, 2, 3, 4, 5];
+let fruits = ["apple", "banana", "orange", "kiwi"];
+
+// map() - creates new array by transforming each element
+let doubled = numbers.map(num => num * 2);
+console.log("Original:", numbers);
+console.log("Doubled:", doubled);
+
+// filter() - creates new array with elements that pass a test
+let evens = numbers.filter(num => num % 2 === 0);
+console.log("Evens:", evens);
+
+// reduce() - reduces array to single value
+let sum = numbers.reduce((acc, num) => acc + num, 0);
+console.log("Sum:", sum);
+
+// find() - returns first element that satisfies condition
+let firstEven = numbers.find(num => num % 2 === 0);
+console.log("First even:", firstEven);
+
+// some() - tests whether at least one element passes the test
+let hasEven = numbers.some(num => num % 2 === 0);
+console.log("Has even:", hasEven);
+
+// forEach() - executes a function for each element
+console.log("Fruits:");
+fruits.forEach(fruit => console.log(fruit));`;
+                    break;
+                    
+                case 'es6':
+                    code = `// Arrow Functions
+const add = (a, b) => a + b;
+const square = x => x * x;
+
+console.log("Add:", add(5, 3)); // 8
+console.log("Square:", square(4)); // 16
+
+// Template Literals
+let name = "Alice";
+let age = 25;
+console.log(\`Hello, my name is \${name} and I'm \${age} years old.\`);
+
+// Destructuring
+// Array destructuring
+let [first, second, ...rest] = [10, 20, 30, 40, 50];
+console.log("First:", first); // 10
+console.log("Second:", second); // 20
+console.log("Rest:", rest); // [30, 40, 50]
+
+// Object destructuring
+let person = { name: "John", age: 30, city: "NYC" };
+let { name: personName, city } = person;
+console.log("Name:", personName); // John
+console.log("City:", city); // NYC
+
+// Spread Operator
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combined = [...arr1, ...arr2];
+console.log("Combined:", combined); // [1, 2, 3, 4, 5, 6]
+
+// Classes
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  
+  greet() {
+    return \`Hello, I'm \${this.name} and I'm \${this.age} years old.\`;
+  }
+}
+
+let john = new Person("John", 30);
+console.log(john.greet()); // Hello, I'm John and I'm 30 years old.`;
+                    break;
+                    
+                default:
+                    code = `// Example code for ${currentConcept}
+console.log("Running code for:", "${currentConcept}");`;
+            }
+            
+            // Create a new output element to show the results
+            let logs = [];
+            const originalLog = console.log;
+            console.log = function(...args) {
+                logs.push(args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+                ).join(' '));
+                originalLog.apply(console, args);
+            };
+            
+            try {
+                // Execute the code
+                eval(code);
+                
+                // Display the captured logs
+                if (logs.length > 0) {
+                    outputElement.textContent = logs.join('\n');
+                } else {
+                    outputElement.textContent = 'Code executed successfully, but no output was generated.';
+                }
+            } catch (error) {
+                outputElement.textContent = 'Error: ' + error.message;
+            }
+            
+            // Restore original console.log
+            console.log = originalLog;
+        }
+        
+        // Clear the output
+        function clearOutput() {
+            outputElement.textContent = 'Output cleared. Click "Run Code" to see output again.';
+        }
+        
+        // Show explanation for the current concept
+        function showExplanation() {
+            let explanation = '';
+            
+            switch(currentConcept) {
+                case 'variables':
+                    explanation = `
+                        <h3>JavaScript Variables</h3>
+                        <p>Variables are containers for storing data values. JavaScript provides three ways to declare variables:</p>
+                        
+                        <ul>
+                            <li><code>let</code> - declares a block-scoped variable that can be reassigned</li>
+                            <li><code>const</code> - declares a block-scoped constant that cannot be reassigned</li>
+                            <li><code>var</code> - declares a function-scoped or globally-scoped variable (older syntax)</li>
+                        </ul>
+                        
+                        <h3>Key Points:</h3>
+                        <ul>
+                            <li>Always use <code>const</code> by default, and only use <code>let</code> when you need to reassign the variable</li>
+                            <li>Avoid using <code>var</code> in modern JavaScript as it has confusing scoping rules</li>
+                            <li>Variable names are case-sensitive and can contain letters, digits, underscores, and dollar signs</li>
+                            <li>Variable names cannot start with a digit</li>
+                        </ul>
+                        
+                        <h3>Example Usage:</h3>
+                        <p>Use <code>const</code> for values that won't change, and <code>let</code> for values that might be reassigned:</p>
+                        <code>const PI = 3.14159;<br>let score = 0;<br>score = 100; // This is allowed with let</code>
+                    `;
+                    break;
+                    
+                case 'dataTypes':
+                    explanation = `
+                        <h3>JavaScript Data Types</h3>
+                        <p>JavaScript has dynamic types, meaning the same variable can hold different data types at different times.</p>
+                        
+                        <h3>Primitive Data Types:</h3>
+                        <ul>
+                            <li><strong>String</strong> - textual data (e.g., "Hello")</li>
+                            <li><strong>Number</strong> - numeric values (e.g., 42, 3.14)</li>
+                            <li><strong>Boolean</strong> - true or false</li>
+                            <li><strong>Undefined</strong> - a variable that has been declared but not assigned a value</li>
+                            <li><strong>Null</strong> - intentional absence of any object value</li>
+                            <li><strong>Symbol</strong> - unique and immutable primitive value (ES6+)</li>
+                            <li><strong>BigInt</strong> - for very large integers (ES2020+)</li>
+                        </ul>
+                        
+                        <h3>Reference Types:</h3>
+                        <ul>
+                            <li><strong>Object</strong> - collections of key-value pairs</li>
+                            <li><strong>Array</strong> - ordered lists of values</li>
+                            <li><strong>Function</strong> - callable objects</li>
+                        </ul>
+                        
+                        <h3>Type Checking:</h3>
+                        <p>Use the <code>typeof</code> operator to check the type of a value:</p>
+                        <code>console.log(typeof "hello"); // "string"<br>console.log(typeof 42); // "number"<br>console.log(typeof []); // "object" (this is a quirk)</code>
+                    `;
+                    break;
+                    
+                case 'arrays':
+                    explanation = `
+                        <h3>JavaScript Arrays</h3>
+                        <p>Arrays are used to store multiple values in a single variable. They are ordered, integer-indexed collections of any type of values.</p>
+                        
+                        <h3>Creating Arrays:</h3>
+                        <code>let fruits = ["Apple", "Banana", "Orange"];<br>let numbers = [1, 2, 3, 4, 5];<br>let mixed = [1, "two", true, null];</code>
+                        
+                        <h3>Common Array Methods:</h3>
+                        <ul>
+                            <li><code>push()</code> - adds elements to the end</li>
+                            <li><code>pop()</code> - removes the last element</li>
+                            <li><code>shift()</code> - removes the first element</li>
+                            <li><code>unshift()</code> - adds elements to the beginning</li>
+                            <li><code>forEach()</code> - executes a function for each element</li>
+                            <li><code>map()</code> - creates a new array with transformed elements</li>
+                            <li><code>filter()</code> - creates a new array with elements that pass a test</li>
+                        </ul>
+                        
+                        <h3>Array Characteristics:</h3>
+                        <ul>
+                            <li>Arrays are zero-indexed (first element is at index 0)</li>
+                            <li>Arrays can hold values of different types</li>
+                            <li>Arrays have a <code>length</code> property</li>
+                            <li>Arrays are objects, so <code>typeof []</code> returns "object"</li>
+                        </ul>
+                    `;
+                    break;
+                    
+                case 'objects':
+                    explanation = `
+                        <h3>JavaScript Objects</h3>
+                        <p>Objects are collections of key-value pairs used to store structured data. They are the fundamental building blocks of JavaScript.</p>
+                        
+                        <h3>Creating Objects:</h3>
+                        <code>let person = {<br>  name: "Alice",<br>  age: 25,<br>  isStudent: false<br>};</code>
+                        
+                        <h3>Accessing Properties:</h3>
+                        <ul>
+                            <li><strong>Dot notation:</strong> <code>person.name</code></li>
+                            <li><strong>Bracket notation:</strong> <code>person["age"]</code></li>
+                        </ul>
+                        
+                        <h3>Object Methods:</h3>
+                        <p>Objects can contain functions as properties (methods):</p>
+                        <code>let person = {<br>  name: "John",<br>  greet: function() {<br>    return "Hello, " + this.name;<br>  }<br>};</code>
+                        
+                        <h3>Built-in Object Methods:</h3>
+                        <ul>
+                            <li><code>Object.keys(obj)</code> - returns an array of keys</li>
+                            <li><code>Object.values(obj)</code> - returns an array of values</li>
+                            <li><code>Object.entries(obj)</code> - returns an array of key-value pairs</li>
+                        </ul>
+                    `;
+                    break;
+                    
+                case 'functions':
+                    explanation = `
+                        <h3>JavaScript Functions</h3>
+                        <p>Functions are reusable blocks of code that perform a specific task. They are first-class citizens in JavaScript.</p>
+                        
+                        <h3>Function Declarations:</h3>
+                        <code>function greet(name) {<br>  return "Hello, " + name;<br>}</code>
+                        
+                        <h3>Function Expressions:</h3>
+                        <code>const square = function(x) {<br>  return x * x;<br>};</code>
+                        
+                        <h3>Arrow Functions (ES6+):</h3>
+                        <code>const add = (a, b) => a + b;</code>
+                        
+                        <h3>Function Characteristics:</h3>
+                        <ul>
+                            <li>Functions can be assigned to variables</li>
+                            <li>Functions can be passed as arguments to other functions</li>
+                            <li>Functions can be returned from other functions</li>
+                            <li>Functions have their own scope</li>
+                        </ul>
+                        
+                        <h3>Higher-Order Functions:</h3>
+                        <p>Functions that take other functions as arguments or return functions are called higher-order functions.</p>
+                        <code>function applyOperation(x, operation) {<br>  return operation(x);<br>}</code>
+                    `;
+                    break;
+                    
+                case 'parameters':
+                    explanation = `
+                        <h3>Function Parameters</h3>
+                        <p>Parameters allow functions to accept input values. JavaScript provides several ways to work with function parameters.</p>
+                        
+                        <h3>Default Parameters (ES6+):</h3>
+                        <p>You can specify default values for parameters:</p>
+                        <code>function greet(name = "Guest") {<br>  return "Hello, " + name;<br>}</code>
+                        
+                        <h3>Rest Parameters (ES6+):</h3>
+                        <p>The rest parameter syntax allows a function to accept an indefinite number of arguments as an array:</p>
+                        <code>function sum(...numbers) {<br>  return numbers.reduce((acc, val) => acc + val, 0);<br>}</code>
+                        
+                        <h3>Spread Operator (ES6+):</h3>
+                        <p>The spread operator allows an iterable to be expanded in places where multiple arguments are expected:</p>
+                        <code>let arr1 = [1, 2, 3];<br>let arr2 = [4, 5, 6];<br>let combined = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]</code>
+                        
+                        <h3>Key Differences:</h3>
+                        <ul>
+                            <li><strong>Rest parameters</strong> collect multiple elements into an array</li>
+                            <li><strong>Spread operator</strong> expands an array into individual elements</li>
+                        </ul>
+                    `;
+                    break;
+                    
+                case 'return':
+                    explanation = `
+                        <h3>Return Statements</h3>
+                        <p>The return statement ends function execution and specifies a value to be returned to the function caller.</p>
+                        
+                        <h3>Basic Return:</h3>
+                        <code>function multiply(a, b) {<br>  return a * b;<br>}</code>
+                        
+                        <h3>Multiple Return Points:</h3>
+                        <p>Functions can have multiple return statements:</p>
+                        <code>function checkNumber(num) {<br>  if (num > 0) {<br>    return "Positive";<br>  } else if (num < 0) {<br>    return "Negative";<br>  } else {<br>    return "Zero";<br>  }<br>}</code>
+                        
+                        <h3>Early Returns:</h3>
+                        <p>Return statements can be used to exit a function early:</p>
+                        <code>function processInput(input) {<br>  if (!input) {<br>    return "No input provided";<br>  }<br>  <br>  return "Processing: " + input;<br>}</code>
+                        
+                        <h3>Returning Functions:</h3>
+                        <p>Functions can return other functions (higher-order functions):</p>
+                        <code>function createMultiplier(multiplier) {<br>  return function(x) {<br>    return x * multiplier;<br>  };<br>}</code>
+                    `;
+                    break;
+                    
+                case 'loops':
+                    explanation = `
+                        <h3>JavaScript Loops</h3>
+                        <p>Loops allow you to execute a block of code multiple times. JavaScript provides several types of loops for different use cases.</p>
+                        
+                        <h3>For Loop:</h3>
+                        <p>The most common loop, used when you know how many times you want to iterate:</p>
+                        <code>for (let i = 0; i < 5; i++) {<br>  console.log(i);<br>}</code>
+                        
+                        <h3>While Loop:</h3>
+                        <p>Used when you don't know how many times you need to iterate, but have a condition to check:</p>
+                        <code>let count = 0;<br>while (count < 3) {<br>  console.log(count);<br>  count++;<br>}</code>
+                        
+                        <h3>Do-While Loop:</h3>
+                        <p>Similar to while loop, but guarantees at least one execution:</p>
+                        <code>let x = 0;<br>do {<br>  console.log(x);<br>  x++;<br>} while (x < 3);</code>
+                        
+                        <h3>For...of Loop (ES6+):</h3>
+                        <p>Used to iterate over iterable objects like arrays, strings, etc.:</p>
+                        <code>let colors = ["red", "green", "blue"];<br>for (let color of colors) {<br>  console.log(color);<br>}</code>
+                        
+                        <h3>For...in Loop:</h3>
+                        <p>Used to iterate over the enumerable properties of an object:</p>
+                        <code>let person = { name: "John", age: 30 };<br>for (let key in person) {<br>  console.log(key + ": " + person[key]);<br>}</code>
+                    `;
+                    break;
+                    
+                case 'closure':
+                    explanation = `
+                        <h3>JavaScript Closures</h3>
+                        <p>A closure is a function that has access to variables in its outer (enclosing) scope even after the outer function has returned.</p>
+                        
+                        <h3>Basic Closure:</h3>
+                        <code>function createCounter() {<br>  let count = 0;<br>  return function() {<br>    count++;<br>    return count;<br>  };<br>}</code>
+                        
+                        <h3>How Closures Work:</h3>
+                        <ul>
+                            <li>Inner functions have access to variables in their outer scope</li>
+                            <li>Even after the outer function has finished executing</li>
+                            <li>Each closure has its own "memory" of the variables it references</li>
+                        </ul>
+                        
+                        <h3>Practical Uses of Closures:</h3>
+                        <ul>
+                            <li><strong>Data Privacy:</strong> Create private variables that can't be accessed from outside</li>
+                            <li><strong>Function Factories:</strong> Create specialized functions</li>
+                            <li><strong>Event Handlers:</strong> Maintain state between events</li>
+                            <li><strong>Module Pattern:</strong> Create self-contained modules</li>
+                        </ul>
+                        
+                        <h3>Closure Example - Function Factory:</h3>
+                        <code>function createMultiplier(multiplier) {<br>  return function(x) {<br>    return x * multiplier;<br>  };<br>}<br><br>let double = createMultiplier(2);<br>let triple = createMultiplier(3);</code>
+                    `;
+                    break;
+                    
+                case 'callback':
+                    explanation = `
+                        <h3>JavaScript Callbacks</h3>
+                        <p>A callback is a function passed as an argument to another function, to be executed later.</p>
+                        
+                        <h3>Synchronous Callbacks:</h3>
+                        <p>Callbacks that are executed immediately:</p>
+                        <code>function processUserInput(callback) {<br>  let name = "John Doe";<br>  callback(name);<br>}<br><br>function greeting(name) {<br>  console.log("Hello, " + name);<br>}<br><br>processUserInput(greeting);</code>
+                        
+                        <h3>Asynchronous Callbacks:</h3>
+                        <p>Callbacks that are executed after an asynchronous operation completes:</p>
+                        <code>setTimeout(function() {<br>  console.log("This runs after 1 second");<br>}, 1000);</code>
+                        
+                        <h3>Common Use Cases:</h3>
+                        <ul>
+                            <li><strong>Event Handling:</strong> Responding to user interactions</li>
+                            <li><strong>Asynchronous Operations:</strong> Handling API calls, file operations</li>
+                            <li><strong>Array Methods:</strong> map, filter, forEach, etc.</li>
+                            <li><strong>Error-First Callbacks:</strong> Node.js convention for error handling</li>
+                        </ul>
+                        
+                        <h3>Callback Hell (Pyramid of Doom):</h3>
+                        <p>Nesting multiple callbacks can lead to hard-to-read code. This is often solved with Promises or async/await.</p>
+                    `;
+                    break;
+                    
+                case 'arrayMethods':
+                    explanation = `
+                        <h3>JavaScript Array Methods</h3>
+                        <p>JavaScript provides many built-in methods for working with arrays. These methods make array manipulation much easier.</p>
+                        
+                        <h3>Transformation Methods:</h3>
+                        <ul>
+                            <li><code>map()</code> - creates a new array with transformed elements</li>
+                            <li><code>filter()</code> - creates a new array with elements that pass a test</li>
+                            <li><code>reduce()</code> - reduces the array to a single value</li>
+                        </ul>
+                        
+                        <h3>Search Methods:</h3>
+                        <ul>
+                            <li><code>find()</code> - returns the first element that satisfies a condition</li>
+                            <li><code>findIndex()</code> - returns the index of the first element that satisfies a condition</li>
+                            <li><code>some()</code> - tests whether at least one element passes the test</li>
+                            <li><code>every()</code> - tests whether all elements pass the test</li>
+                        </ul>
+                        
+                        <h3>Iteration Methods:</h3>
+                        <ul>
+                            <li><code>forEach()</code> - executes a function for each element</li>
+                            <li><code>for...of</code> - modern loop for iterating over arrays</li>
+                        </ul>
+                        
+                        <h3>Method Chaining:</h3>
+                        <p>Array methods can be chained together for complex operations:</p>
+                        <code>let result = numbers<br>  .filter(num => num > 2)<br>  .map(num => num * 3)<br>  .reduce((acc, num) => acc + num, 0);</code>
+                    `;
+                    break;
+                    
+                case 'es6':
+                    explanation = `
+                        <h3>ES6+ JavaScript Features</h3>
+                        <p>ECMAScript 2015 (ES6) and later versions introduced many powerful features that modernize JavaScript.</p>
+                        
+                        <h3>Arrow Functions:</h3>
+                        <p>Shorter syntax for function expressions and lexical <code>this</code> binding:</p>
+                        <code>const add = (a, b) => a + b;</code>
+                        
+                        <h3>Template Literals:</h3>
+                        <p>Multi-line strings and string interpolation:</p>
+                        <code>\`Hello, \${name}! You are \${age} years old.\`</code>
+                        
+                        <h3>Destructuring:</h3>
+                        <p>Extract values from arrays or properties from objects into distinct variables:</p>
+                        <code>let [first, second] = [10, 20];<br>let { name, age } = person;</code>
+                        
+                        <h3>Spread and Rest Operators:</h3>
+                        <p>Spread expands elements, rest collects them:</p>
+                        <code>let combined = [...arr1, ...arr2];<br>function sum(...numbers) { ... }</code>
+                        
+                        <h3>Classes:</h3>
+                        <p>Syntactic sugar over JavaScript's prototype-based inheritance:</p>
+                        <code>class Person {<br>  constructor(name) {<br>    this.name = name;<br>  }<br>  greet() {<br>    return \`Hello, I'm \${this.name}\`;<br>  }<br>}</code>
+                        
+                        <h3>Modules:</h3>
+                        <p>Native support for modular code organization:</p>
+                        <code>export function add(a, b) { ... }<br>import { add } from './math.js';</code>
+                        
+                        <h3>Promises and Async/Await:</h3>
+                        <p>Better asynchronous programming patterns:</p>
+                        <code>async function fetchData() {<br>  let data = await fetch(url);<br>  return data.json();<br>}</code>
+                    `;
+                    break;
+                    
+                default:
+                    explanation = `<p>Detailed explanation for ${currentConcept} would appear here. This is a comprehensive learning platform with in-depth information about each JavaScript concept.</p>`;
+            }
+            
+            explanationElement.innerHTML = explanation;
+        }
+        
+        // Initialize the page
+        updateProgress();
+    </script>
+</body>
+</html>

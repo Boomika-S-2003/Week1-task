@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Learning Playground</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--light);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #adb5bd;
+            margin-bottom: 20px;
+        }
+        
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .concept-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .concept-card h3 {
+            color: var(--success);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .concept-card h3 i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .concept-card p {
+            color: #ced4da;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            overflow-x: auto;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .output-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .output-section h2 {
+            color: var(--success);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .output-section h2 i {
+            margin-right: 10px;
+        }
+        
+        #output {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        .active {
+            border: 2px solid var(--success);
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JavaScript Learning Playground</h1>
+            <p class="subtitle">Explore JavaScript concepts with interactive examples</p>
+        </header>
+        
+        <div class="concepts-grid">
+            <div class="concept-card" onclick="showExample('variables')">
+                <h3><i>📝</i> Variables</h3>
+                <p>Variables are containers for storing data values. JavaScript uses <code>let</code>, <code>const</code>, and <code>var</code> to declare variables.</p>
+                <div class="code-block">
+// Variable Declaration<br>
+let name = "John";<br>
+const age = 30;<br>
+var isStudent = true;<br><br>
+// Output variables<br>
+console.log(name, age, isStudent);
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('dataTypes')">
+                <h3><i>🔤</i> Data Types</h3>
+                <p>JavaScript has dynamic types. The same variable can hold different data types.</p>
+                <div class="code-block">
+// Primitive Data Types<br>
+let string = "Hello World";<br>
+let number = 42;<br>
+let boolean = true;<br>
+let nullValue = null;<br>
+let undefinedValue;<br><br>
+// Output types<br>
+console.log(typeof string, typeof number);
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('arrays')">
+                <h3><i>📊</i> Arrays</h3>
+                <p>Arrays are used to store multiple values in a single variable.</p>
+                <div class="code-block">
+// Array Declaration<br>
+let fruits = ["Apple", "Banana", "Orange"];<br>
+let numbers = [1, 2, 3, 4, 5];<br><br>
+// Access array elements<br>
+console.log(fruits[0]); // Apple<br>
+console.log(numbers.length); // 5
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('objects')">
+                <h3><i>📦</i> Objects</h3>
+                <p>Objects are collections of key-value pairs used to store related data.</p>
+                <div class="code-block">
+// Object Declaration<br>
+let person = {<br>
+  name: "Alice",<br>
+  age: 25,<br>
+  isStudent: false,<br>
+  hobbies: ["reading", "coding"]<br>
+};<br><br>
+// Access object properties<br>
+console.log(person.name);<br>
+console.log(person.hobbies[0]);
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('functions')">
+                <h3><i>⚙️</i> Functions</h3>
+                <p>Functions are blocks of code designed to perform a particular task.</p>
+                <div class="code-block">
+// Function Declaration<br>
+function greet(name) {<br>
+  return "Hello, " + name + "!";<br>
+}<br><br>
+// Function Call<br>
+let message = greet("Sarah");<br>
+console.log(message); // Hello, Sarah!
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('parameters')">
+                <h3><i>🔀</i> Parameters & Spread/Rest</h3>
+                <p>Functions can accept parameters. Spread and rest operators provide flexibility.</p>
+                <div class="code-block">
+// Rest Parameters<br>
+function sum(...numbers) {<br>
+  return numbers.reduce((acc, val) => acc + val, 0);<br>
+}<br><br>
+// Spread Operator<br>
+let arr1 = [1, 2, 3];<br>
+let arr2 = [...arr1, 4, 5];<br><br>
+console.log(sum(1, 2, 3, 4)); // 10<br>
+console.log(arr2); // [1, 2, 3, 4, 5]
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('return')">
+                <h3><i>↩️</i> Return Statements</h3>
+                <p>The return statement stops function execution and returns a value.</p>
+                <div class="code-block">
+// Function with return<br>
+function multiply(a, b) {<br>
+  return a * b;<br>
+}<br><br>
+// Using the returned value<br>
+let result = multiply(5, 3);<br>
+console.log(result); // 15<br><br>
+// Function without return<br>
+function sayHello(name) {<br>
+  console.log("Hello, " + name);<br>
+}<br><br>
+let greeting = sayHello("Tom");<br>
+console.log(greeting); // undefined
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('loops')">
+                <h3><i>🔄</i> Loops</h3>
+                <p>Loops execute a block of code multiple times.</p>
+                <div class="code-block">
+// For Loop<br>
+for (let i = 0; i < 5; i++) {<br>
+  console.log("Iteration: " + i);<br>
+}<br><br>
+// While Loop<br>
+let count = 0;<br>
+while (count < 3) {<br>
+  console.log("Count: " + count);<br>
+  count++;<br>
+}<br><br>
+// For...of Loop (ES6+)<br>
+let colors = ["red", "green", "blue"];<br>
+for (let color of colors) {<br>
+  console.log(color);<br>
+}
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('closure')">
+                <h3><i>🔒</i> Closures</h3>
+                <p>A closure gives you access to an outer function's scope from an inner function.</p>
+                <div class="code-block">
+// Closure Example<br>
+function createCounter() {<br>
+  let count = 0;<br>
+  return function() {<br>
+    count++;<br>
+    return count;<br>
+  };<br>
+}<br><br>
+let counter = createCounter();<br>
+console.log(counter()); // 1<br>
+console.log(counter()); // 2<br>
+console.log(counter()); // 3
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('callback')">
+                <h3><i>📞</i> Callbacks</h3>
+                <p>A callback is a function passed as an argument to another function.</p>
+                <div class="code-block">
+// Callback Example<br>
+function processUserInput(callback) {<br>
+  let name = "John Doe";<br>
+  callback(name);<br>
+}<br><br>
+function greeting(name) {<br>
+  console.log("Hello, " + name);<br>
+}<br><br>
+processUserInput(greeting); // Hello, John Doe<br><br>
+// Asynchronous callback<br>
+setTimeout(function() {<br>
+  console.log("This runs after 1 second");<br>
+}, 1000);
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('arrayMethods')">
+                <h3><i>🧰</i> Array Methods</h3>
+                <p>JavaScript provides many built-in methods to work with arrays.</p>
+                <div class="code-block">
+let numbers = [1, 2, 3, 4, 5];<br><br>
+// map() - creates new array<br>
+let doubled = numbers.map(num => num * 2);<br><br>
+// filter() - filters elements<br>
+let evens = numbers.filter(num => num % 2 === 0);<br><br>
+// reduce() - reduces to single value<br>
+let sum = numbers.reduce((acc, num) => acc + num, 0);<br><br>
+console.log(doubled); // [2, 4, 6, 8, 10]<br>
+console.log(evens); // [2, 4]<br>
+console.log(sum); // 15
+                </div>
+            </div>
+            
+            <div class="concept-card" onclick="showExample('es6')">
+                <h3><i>✨</i> ES6+ Features</h3>
+                <p>Modern JavaScript (ES6+) introduced many new features.</p>
+                <div class="code-block">
+// Arrow Functions<br>
+const add = (a, b) => a + b;<br><br>
+// Template Literals<br>
+let name = "Alice";<br>
+console.log(`Hello, ${name}!`);<br><br>
+// Destructuring<br>
+let [first, second] = [10, 20];<br>
+let {age, city} = {age: 30, city: "NYC"};<br><br>
+// Classes<br>
+class Person {<br>
+  constructor(name) {<br>
+    this.name = name;<br>
+  }<br>
+  greet() {<br>
+    return `Hello, I'm ${this.name}`;<br>
+  }<br>
+}
+                </div>
+            </div>
+        </div>
+        
+        <div class="output-section">
+            <h2><i>📤</i> Output</h2>
+            <div id="output">Select a concept to see the code execution...</div>
+            <button class="btn" onclick="runCode()">Run Code</button>
+            <button class="btn" onclick="clearOutput()">Clear Output</button>
+        </div>
+        
+        <footer>
+            <p>JavaScript Learning Playground &copy; 2023 | Practice and explore JavaScript concepts interactively</p>
+        </footer>
+    </div>
+
+    <script>
+        let currentExample = '';
+        let outputElement = document.getElementById('output');
+        
+        function showExample(concept) {
+            // Remove active class from all cards
+            document.querySelectorAll('.concept-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to clicked card
+            event.currentTarget.classList.add('active');
+            
+            currentExample = concept;
+            let code = '';
+            
+            switch(concept) {
+                case 'variables':
+                    code = `// Variable Declaration
+let name = "John";
+const age = 30;
+var isStudent = true;
+
+// Output variables
+console.log("Name:", name);
+console.log("Age:", age);
+console.log("Is Student:", isStudent);
+
+// Variable reassignment
+name = "Jane";
+console.log("Updated Name:", name);
+
+// Constants cannot be reassigned
+// age = 31; // This would cause an error`;
+                    break;
+                    
+                case 'dataTypes':
+                    code = `// Primitive Data Types
+let string = "Hello World";
+let number = 42;
+let boolean = true;
+let nullValue = null;
+let undefinedValue;
+let symbol = Symbol('id');
+
+// Output types
+console.log("String:", string, "Type:", typeof string);
+console.log("Number:", number, "Type:", typeof number);
+console.log("Boolean:", boolean, "Type:", typeof boolean);
+console.log("Null:", nullValue, "Type:", typeof nullValue);
+console.log("Undefined:", undefinedValue, "Type:", typeof undefinedValue);
+console.log("Symbol:", symbol.toString(), "Type:", typeof symbol);
+
+// Reference Types
+let array = [1, 2, 3];
+let object = { key: "value" };
+let functionType = function() {};
+
+console.log("Array:", array, "Type:", typeof array);
+console.log("Object:", object, "Type:", typeof object);
+console.log("Function:", functionType, "Type:", typeof functionType);`;
+                    break;
+                    
+                case 'arrays':
+                    code = `// Array Declaration
+let fruits = ["Apple", "Banana", "Orange"];
+let numbers = [1, 2, 3, 4, 5];
+let mixed = [1, "two", true, null];
+
+// Access array elements
+console.log("First fruit:", fruits[0]);
+console.log("Array length:", numbers.length);
+
+// Array methods
+fruits.push("Grapes"); // Add to end
+console.log("After push:", fruits);
+
+fruits.pop(); // Remove from end
+console.log("After pop:", fruits);
+
+fruits.unshift("Strawberry"); // Add to beginning
+console.log("After unshift:", fruits);
+
+fruits.shift(); // Remove from beginning
+console.log("After shift:", fruits);
+
+// Iterating through arrays
+console.log("All fruits:");
+fruits.forEach(fruit => console.log(fruit));`;
+                    break;
+                    
+                case 'objects':
+                    code = `// Object Declaration
+let person = {
+  name: "Alice",
+  age: 25,
+  isStudent: false,
+  hobbies: ["reading", "coding", "gaming"],
+  address: {
+    street: "123 Main St",
+    city: "Boston"
+  },
+  greet: function() {
+    return "Hello, my name is " + this.name;
+  }
+};
+
+// Access object properties
+console.log("Name:", person.name);
+console.log("Age:", person.age);
+console.log("First hobby:", person.hobbies[0]);
+console.log("City:", person.address.city);
+console.log("Greeting:", person.greet());
+
+// Adding new properties
+person.email = "alice@example.com";
+console.log("Email:", person.email);
+
+// Object methods
+console.log("Keys:", Object.keys(person));
+console.log("Values:", Object.values(person));`;
+                    break;
+                    
+                case 'functions':
+                    code = `// Function Declaration
+function greet(name) {
+  return "Hello, " + name + "!";
+}
+
+// Function Expression
+const square = function(x) {
+  return x * x;
+};
+
+// Arrow Function (ES6+)
+const cube = (x) => x * x * x;
+
+// Function Calls
+let message = greet("Sarah");
+let squared = square(5);
+let cubed = cube(3);
+
+console.log(message); // Hello, Sarah!
+console.log("5 squared:", squared); // 25
+console.log("3 cubed:", cubed); // 27
+
+// Higher-order function
+function applyOperation(x, operation) {
+  return operation(x);
+}
+
+let result = applyOperation(4, square);
+console.log("Applied operation:", result); // 16`;
+                    break;
+                    
+                case 'parameters':
+                    code = `// Regular Parameters
+function multiply(a, b) {
+  return a * b;
+}
+
+console.log("Multiply:", multiply(5, 3)); // 15
+
+// Default Parameters
+function greet(name = "Guest") {
+  return "Hello, " + name;
+}
+
+console.log("Default param:", greet()); // Hello, Guest
+console.log("With param:", greet("John")); // Hello, John
+
+// Rest Parameters
+function sum(...numbers) {
+  return numbers.reduce((acc, val) => acc + val, 0);
+}
+
+console.log("Sum:", sum(1, 2, 3, 4)); // 10
+console.log("Sum:", sum(10, 20)); // 30
+
+// Spread Operator
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combined = [...arr1, ...arr2];
+console.log("Combined array:", combined); // [1, 2, 3, 4, 5, 6]
+
+// Spread with objects
+let obj1 = { a: 1, b: 2 };
+let obj2 = { c: 3, d: 4 };
+let merged = { ...obj1, ...obj2 };
+console.log("Merged object:", merged); // {a: 1, b: 2, c: 3, d: 4}`;
+                    break;
+                    
+                case 'return':
+                    code = `// Function with return
+function multiply(a, b) {
+  return a * b;
+}
+
+// Using the returned value
+let result = multiply(5, 3);
+console.log("Multiplication result:", result); // 15
+
+// Function without return
+function sayHello(name) {
+  console.log("Hello, " + name);
+}
+
+let greeting = sayHello("Tom");
+console.log("Return value of sayHello:", greeting); // undefined
+
+// Multiple return points
+function checkNumber(num) {
+  if (num > 0) {
+    return "Positive";
+  } else if (num < 0) {
+    return "Negative";
+  } else {
+    return "Zero";
+  }
+}
+
+console.log("Check 5:", checkNumber(5)); // Positive
+console.log("Check -2:", checkNumber(-2)); // Negative
+console.log("Check 0:", checkNumber(0)); // Zero
+
+// Early return
+function processInput(input) {
+  if (!input) {
+    return "No input provided";
+  }
+  
+  return "Processing: " + input;
+}
+
+console.log(processInput("")); // No input provided
+console.log(processInput("data")); // Processing: data`;
+                    break;
+                    
+                case 'loops':
+                    code = `// For Loop
+console.log("For Loop:");
+for (let i = 0; i < 5; i++) {
+  console.log("Iteration: " + i);
+}
+
+// While Loop
+console.log("\\nWhile Loop:");
+let count = 0;
+while (count < 3) {
+  console.log("Count: " + count);
+  count++;
+}
+
+// Do-While Loop
+console.log("\\nDo-While Loop:");
+let x = 0;
+do {
+  console.log("x: " + x);
+  x++;
+} while (x < 3);
+
+// For...of Loop (ES6+)
+console.log("\\nFor...of Loop:");
+let colors = ["red", "green", "blue"];
+for (let color of colors) {
+  console.log(color);
+}
+
+// For...in Loop (for objects)
+console.log("\\nFor...in Loop:");
+let person = { name: "John", age: 30, city: "NYC" };
+for (let key in person) {
+  console.log(key + ": " + person[key]);
+}
+
+// Break and Continue
+console.log("\\nBreak and Continue:");
+for (let i = 0; i < 10; i++) {
+  if (i === 3) continue; // Skip 3
+  if (i === 7) break; // Stop at 7
+  console.log(i);
+}`;
+                    break;
+                    
+                case 'closure':
+                    code = `// Basic Closure
+function createCounter() {
+  let count = 0;
+  return function() {
+    count++;
+    return count;
+  };
+}
+
+let counter = createCounter();
+console.log("Counter:", counter()); // 1
+console.log("Counter:", counter()); // 2
+console.log("Counter:", counter()); // 3
+
+// Each closure has its own state
+let counter2 = createCounter();
+console.log("Counter2:", counter2()); // 1
+console.log("Counter2:", counter2()); // 2
+
+// Practical closure example
+function createMultiplier(multiplier) {
+  return function(x) {
+    return x * multiplier;
+  };
+}
+
+let double = createMultiplier(2);
+let triple = createMultiplier(3);
+
+console.log("Double 5:", double(5)); // 10
+console.log("Triple 5:", triple(5)); // 15
+
+// Module pattern with closure
+let calculator = (function() {
+  let memory = 0;
+  
+  return {
+    add: function(a, b) {
+      return a + b;
+    },
+    subtract: function(a, b) {
+      return a - b;
+    },
+    store: function(value) {
+      memory = value;
+    },
+    recall: function() {
+      return memory;
+    }
+  };
+})();
+
+console.log("Add:", calculator.add(5, 3)); // 8
+calculator.store(100);
+console.log("Memory:", calculator.recall()); // 100`;
+                    break;
+                    
+                case 'callback':
+                    code = `// Synchronous Callback
+function processUserInput(callback) {
+  let name = "John Doe";
+  callback(name);
+}
+
+function greeting(name) {
+  console.log("Hello, " + name);
+}
+
+processUserInput(greeting); // Hello, John Doe
+
+// Callback with parameters
+function calculate(a, b, operation) {
+  return operation(a, b);
+}
+
+function add(x, y) {
+  return x + y;
+}
+
+function multiply(x, y) {
+  return x * y;
+}
+
+console.log("Addition:", calculate(5, 3, add)); // 8
+console.log("Multiplication:", calculate(5, 3, multiply)); // 15
+
+// Asynchronous callback with setTimeout
+console.log("Starting timer...");
+setTimeout(function() {
+  console.log("This runs after 1 second");
+}, 1000);
+
+// Array method with callback
+let numbers = [1, 2, 3, 4, 5];
+let doubled = numbers.map(function(num) {
+  return num * 2;
+});
+
+console.log("Original:", numbers);
+console.log("Doubled:", doubled);
+
+// Error-first callback pattern (Node.js style)
+function asyncOperation(callback) {
+  // Simulate async operation
+  setTimeout(() => {
+    let error = Math.random() > 0.5 ? null : new Error("Something went wrong");
+    let data = error ? null : { message: "Operation successful" };
+    callback(error, data);
+  }, 500);
+}
+
+asyncOperation((err, result) => {
+  if (err) {
+    console.log("Error:", err.message);
+  } else {
+    console.log("Success:", result.message);
+  }
+});`;
+                    break;
+                    
+                case 'arrayMethods':
+                    code = `let numbers = [1, 2, 3, 4, 5];
+let fruits = ["apple", "banana", "orange", "kiwi"];
+
+// map() - creates new array by transforming each element
+let doubled = numbers.map(num => num * 2);
+console.log("Original:", numbers);
+console.log("Doubled:", doubled);
+
+// filter() - creates new array with elements that pass a test
+let evens = numbers.filter(num => num % 2 === 0);
+console.log("Evens:", evens);
+
+// reduce() - reduces array to single value
+let sum = numbers.reduce((acc, num) => acc + num, 0);
+console.log("Sum:", sum);
+
+// find() - returns first element that satisfies condition
+let firstEven = numbers.find(num => num % 2 === 0);
+console.log("First even:", firstEven);
+
+// findIndex() - returns index of first element that satisfies condition
+let firstEvenIndex = numbers.findIndex(num => num % 2 === 0);
+console.log("First even index:", firstEvenIndex);
+
+// some() - tests whether at least one element passes the test
+let hasEven = numbers.some(num => num % 2 === 0);
+console.log("Has even:", hasEven);
+
+// every() - tests whether all elements pass the test
+let allEven = numbers.every(num => num % 2 === 0);
+console.log("All even:", allEven);
+
+// forEach() - executes a function for each element
+console.log("Fruits:");
+fruits.forEach(fruit => console.log(fruit));
+
+// sort() - sorts array elements
+let sortedFruits = [...fruits].sort();
+console.log("Sorted fruits:", sortedFruits);
+
+// Chaining array methods
+let result = numbers
+  .filter(num => num > 2)
+  .map(num => num * 3)
+  .reduce((acc, num) => acc + num, 0);
+  
+console.log("Chained result:", result);`;
+                    break;
+                    
+                case 'es6':
+                    code = `// Arrow Functions
+const add = (a, b) => a + b;
+const square = x => x * x;
+
+console.log("Add:", add(5, 3)); // 8
+console.log("Square:", square(4)); // 16
+
+// Template Literals
+let name = "Alice";
+let age = 25;
+console.log(\`Hello, my name is \${name} and I'm \${age} years old.\`);
+
+// Destructuring
+// Array destructuring
+let [first, second, ...rest] = [10, 20, 30, 40, 50];
+console.log("First:", first); // 10
+console.log("Second:", second); // 20
+console.log("Rest:", rest); // [30, 40, 50]
+
+// Object destructuring
+let person = { name: "John", age: 30, city: "NYC" };
+let { name: personName, city } = person;
+console.log("Name:", personName); // John
+console.log("City:", city); // NYC
+
+// Spread Operator
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combined = [...arr1, ...arr2];
+console.log("Combined:", combined); // [1, 2, 3, 4, 5, 6]
+
+// Classes
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+  
+  greet() {
+    return \`Hello, I'm \${this.name} and I'm \${this.age} years old.\`;
+  }
+  
+  static species() {
+    return "Homo sapiens";
+  }
+}
+
+let john = new Person("John", 30);
+console.log(john.greet()); // Hello, I'm John and I'm 30 years old.
+console.log("Species:", Person.species()); // Homo sapiens
+
+// Promises
+let promise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    if (Math.random() > 0.5) {
+      resolve("Operation successful!");
+    } else {
+      reject("Operation failed!");
+    }
+  }, 1000);
+});
+
+promise
+  .then(result => console.log("Success:", result))
+  .catch(error => console.log("Error:", error));
+
+// Modules (conceptual - would need separate files)
+// export function add(a, b) { return a + b; }
+// import { add } from './math.js';`;
+                    break;
+            }
+            
+            outputElement.textContent = code;
+        }
+        
+        function runCode() {
+            if (!currentExample) {
+                outputElement.textContent = "Please select a concept first!";
+                return;
+            }
+            
+            let code = outputElement.textContent;
+            
+            // Create a new output element to show the results
+            let newOutput = document.createElement('div');
+            newOutput.innerHTML = '<strong>Code Output:</strong><br>';
+            
+            // Override console.log to capture output
+            let logs = [];
+            const originalLog = console.log;
+            console.log = function(...args) {
+                logs.push(args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+                ).join(' '));
+                originalLog.apply(console, args);
+            };
+            
+            try {
+                // Execute the code
+                eval(code);
+                
+                // Display the captured logs
+                if (logs.length > 0) {
+                    newOutput.innerHTML += logs.join('<br>');
+                } else {
+                    newOutput.innerHTML += 'No output generated.';
+                }
+            } catch (error) {
+                newOutput.innerHTML += 'Error: ' + error.message;
+            }
+            
+            // Restore original console.log
+            console.log = originalLog;
+            
+            outputElement.innerHTML = code + '<br><br>' + newOutput.innerHTML;
+        }
+        
+        function clearOutput() {
+            outputElement.textContent = "Select a concept to see the code execution...";
+            document.querySelectorAll('.concept-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            currentExample = '';
+        }
+    </script>
+</body>
+</html>
