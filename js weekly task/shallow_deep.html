@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shallow Copy vs Deep Copy - Learning Tool</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4cc9f0;
+        }
+        
+        h1 {
+            color: #4cc9f0;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a9a9a9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .panel {
+            background-color: #162447;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .panel h2 {
+            color: #4cc9f0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1f4068;
+        }
+        
+        .definition {
+            background-color: #1f4068;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4cc9f0;
+        }
+        
+        .visualization {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .memory-diagram {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .memory-block {
+            background-color: #1f4068;
+            border-radius: 8px;
+            padding: 15px;
+            width: 200px;
+            margin: 10px;
+            position: relative;
+        }
+        
+        .memory-block h3 {
+            text-align: center;
+            color: #f72585;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .object {
+            border: 2px solid #4cc9f0;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .object-title {
+            font-weight: bold;
+            color: #f72585;
+        }
+        
+        .property {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            padding: 3px 0;
+            border-bottom: 1px dashed #4cc9f0;
+        }
+        
+        .pointer {
+            color: #72efdd;
+            font-weight: bold;
+        }
+        
+        .arrow {
+            font-size: 1.5rem;
+            color: #f72585;
+            margin: 10px;
+        }
+        
+        .code-example {
+            background-color: #0f3460;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.95rem;
+        }
+        
+        .code-example pre {
+            white-space: pre-wrap;
+        }
+        
+        .method-list {
+            margin-top: 20px;
+        }
+        
+        .method {
+            background-color: #1f4068;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #f72585;
+        }
+        
+        .method-title {
+            font-weight: bold;
+            color: #72efdd;
+        }
+        
+        .interactive-section {
+            background-color: #162447;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: #4cc9f0;
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 180px;
+        }
+        
+        button:hover {
+            background-color: #f72585;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .result {
+            background-color: #1f4068;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            min-height: 150px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            border-left: 4px solid #72efdd;
+        }
+        
+        .highlight {
+            color: #f72585;
+            font-weight: bold;
+        }
+        
+        .explanation {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #1f4068;
+            border-radius: 10px;
+            border-left: 4px solid #4cc9f0;
+        }
+        
+        .explanation h3 {
+            color: #4cc9f0;
+            margin-bottom: 10px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #4cc9f0;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: #0f3460;
+            color: #4cc9f0;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #1f4068;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .memory-diagram {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Shallow Copy vs Deep Copy</h1>
+            <p class="subtitle">An interactive guide to understand the differences between shallow and deep copying in JavaScript. Modify objects and see how different copy methods affect the original and copied data.</p>
+        </header>
+        
+        <div class="content">
+            <div class="panel">
+                <h2>Shallow Copy</h2>
+                <div class="definition">
+                    <p>A <span class="highlight">shallow copy</span> creates a new object and copies the top-level properties of the original object. However, if a property is a reference to another object, only the reference is copied, not the referenced object itself.</p>
+                </div>
+                
+                <div class="visualization">
+                    <h3>Memory Visualization</h3>
+                    <div class="memory-diagram">
+                        <div class="memory-block">
+                            <h3>Original Object</h3>
+                            <div class="object">
+                                <div class="object-title">person</div>
+                                <div class="property">name: <span>"John"</span></div>
+                                <div class="property">age: <span>30</span></div>
+                                <div class="property">address: <span class="pointer">0x1234</span></div>
+                            </div>
+                            <div class="object">
+                                <div class="object-title">address object</div>
+                                <div class="property">city: <span>"New York"</span></div>
+                                <div class="property">zip: <span>"10001"</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow">→</div>
+                        
+                        <div class="memory-block">
+                            <h3>Shallow Copy</h3>
+                            <div class="object">
+                                <div class="object-title">shallowCopy</div>
+                                <div class="property">name: <span>"John"</span></div>
+                                <div class="property">age: <span>30</span></div>
+                                <div class="property">address: <span class="pointer">0x1234</span></div>
+                            </div>
+                            <div class="object">
+                                <div class="object-title">address object</div>
+                                <div class="property">city: <span>"New York"</span></div>
+                                <div class="property">zip: <span>"10001"</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="highlight">Both objects share the same address object!</p>
+                </div>
+                
+                <h3>Common Shallow Copy Methods</h3>
+                <div class="method-list">
+                    <div class="method">
+                        <div class="method-title">Spread Operator (...)</div>
+                        <div class="code-example">
+                            <pre>const shallowCopy = { ...originalObject };</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <div class="method-title">Object.assign()</div>
+                        <div class="code-example">
+                            <pre>const shallowCopy = Object.assign({}, originalObject);</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <div class="method-title">Array.slice()</div>
+                        <div class="code-example">
+                            <pre>const shallowCopy = originalArray.slice();</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2>Deep Copy</h2>
+                <div class="definition">
+                    <p>A <span class="highlight">deep copy</span> creates a new object and recursively copies all nested objects and arrays. The copied object is completely independent from the original, with no shared references.</p>
+                </div>
+                
+                <div class="visualization">
+                    <h3>Memory Visualization</h3>
+                    <div class="memory-diagram">
+                        <div class="memory-block">
+                            <h3>Original Object</h3>
+                            <div class="object">
+                                <div class="object-title">person</div>
+                                <div class="property">name: <span>"John"</span></div>
+                                <div class="property">age: <span>30</span></div>
+                                <div class="property">address: <span class="pointer">0x1234</span></div>
+                            </div>
+                            <div class="object">
+                                <div class="object-title">address object</div>
+                                <div class="property">city: <span>"New York"</span></div>
+                                <div class="property">zip: <span>"10001"</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow">→</div>
+                        
+                        <div class="memory-block">
+                            <h3>Deep Copy</h3>
+                            <div class="object">
+                                <div class="object-title">deepCopy</div>
+                                <div class="property">name: <span>"John"</span></div>
+                                <div class="property">age: <span>30</span></div>
+                                <div class="property">address: <span class="pointer">0x5678</span></div>
+                            </div>
+                            <div class="object">
+                                <div class="object-title">address object</div>
+                                <div class="property">city: <span>"New York"</span></div>
+                                <div class="property">zip: <span>"10001"</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="highlight">Each object has its own address object!</p>
+                </div>
+                
+                <h3>Common Deep Copy Methods</h3>
+                <div class="method-list">
+                    <div class="method">
+                        <div class="method-title">JSON.parse() & JSON.stringify()</div>
+                        <div class="code-example">
+                            <pre>const deepCopy = JSON.parse(JSON.stringify(originalObject));</pre>
+                        </div>
+                        <p><em>Limitation: Doesn't handle functions, undefined, or circular references</em></p>
+                    </div>
+                    
+                    <div class="method">
+                        <div class="method-title">Lodash cloneDeep()</div>
+                        <div class="code-example">
+                            <pre>const deepCopy = _.cloneDeep(originalObject);</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="method">
+                        <div class="method-title">Recursive custom function</div>
+                        <div class="code-example">
+<pre>function deepCopy(obj) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  let copy = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    copy[key] = deepCopy(obj[key]);
+  }
+  return copy;
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="interactive-section">
+            <h2>Try It Yourself</h2>
+            <p>Experiment with shallow and deep copy methods. See what happens when you modify nested objects in the copies.</p>
+            
+            <div class="button-group">
+                <button id="create-object">Create Sample Object</button>
+                <button id="shallow-copy">Create Shallow Copy</button>
+                <button id="deep-copy">Create Deep Copy</button>
+                <button id="modify-nested">Modify Nested Property</button>
+                <button id="reset">Reset All</button>
+            </div>
+            
+            <div class="result" id="result">
+                Click "Create Sample Object" to start experimenting.
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3>Key Differences</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Shallow Copy</th>
+                        <th>Deep Copy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>What is copied</strong></td>
+                        <td>Only top-level properties</td>
+                        <td>All levels, including nested objects/arrays</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reference sharing</strong></td>
+                        <td>Nested objects are shared</td>
+                        <td>No shared references</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Memory usage</strong></td>
+                        <td>Less memory (shares references)</td>
+                        <td>More memory (creates new objects)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Performance</strong></td>
+                        <td>Faster to create</td>
+                        <td>Slower to create</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use case</strong></td>
+                        <td>When nested objects won't change</td>
+                        <td>When you need complete independence</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Initial sample object
+        let originalObject = null;
+        let shallowCopyObj = null;
+        let deepCopyObj = null;
+        
+        // DOM elements
+        const createObjectBtn = document.getElementById('create-object');
+        const shallowCopyBtn = document.getElementById('shallow-copy');
+        const deepCopyBtn = document.getElementById('deep-copy');
+        const modifyNestedBtn = document.getElementById('modify-nested');
+        const resetBtn = document.getElementById('reset');
+        const resultDiv = document.getElementById('result');
+        
+        // Helper function to display objects
+        function displayObjects() {
+            let output = '';
+            
+            if (originalObject) {
+                output += 'Original Object:\n' + JSON.stringify(originalObject, null, 2) + '\n\n';
+            }
+            
+            if (shallowCopyObj) {
+                output += 'Shallow Copy:\n' + JSON.stringify(shallowCopyObj, null, 2) + '\n\n';
+            }
+            
+            if (deepCopyObj) {
+                output += 'Deep Copy:\n' + JSON.stringify(deepCopyObj, null, 2) + '\n\n';
+            }
+            
+            // Check if objects are the same
+            if (originalObject && shallowCopyObj) {
+                const shallowSameRef = originalObject.address === shallowCopyObj.address;
+                output += `Shallow copy shares address reference: ${shallowSameRef}\n`;
+            }
+            
+            if (originalObject && deepCopyObj) {
+                const deepSameRef = originalObject.address === deepCopyObj.address;
+                output += `Deep copy shares address reference: ${deepSameRef}`;
+            }
+            
+            resultDiv.textContent = output;
+        }
+        
+        // Create a sample object with nested properties
+        createObjectBtn.addEventListener('click', function() {
+            originalObject = {
+                name: "John Doe",
+                age: 30,
+                address: {
+                    city: "New York",
+                    zip: "10001",
+                    coordinates: {
+                        lat: 40.7128,
+                        lng: -74.0060
+                    }
+                },
+                hobbies: ["reading", "gaming"]
+            };
+            
+            shallowCopyObj = null;
+            deepCopyObj = null;
+            
+            displayObjects();
+        });
+        
+        // Create a shallow copy
+        shallowCopyBtn.addEventListener('click', function() {
+            if (!originalObject) {
+                resultDiv.textContent = "Please create an object first!";
+                return;
+            }
+            
+            // Using spread operator for shallow copy
+            shallowCopyObj = { ...originalObject };
+            
+            displayObjects();
+        });
+        
+        // Create a deep copy
+        deepCopyBtn.addEventListener('click', function() {
+            if (!originalObject) {
+                resultDiv.textContent = "Please create an object first!";
+                return;
+            }
+            
+            // Using JSON methods for deep copy (with limitations)
+            deepCopyObj = JSON.parse(JSON.stringify(originalObject));
+            
+            displayObjects();
+        });
+        
+        // Modify nested property to see the difference
+        modifyNestedBtn.addEventListener('click', function() {
+            if (!originalObject) {
+                resultDiv.textContent = "Please create an object first!";
+                return;
+            }
+            
+            // Modify a nested property in the shallow copy
+            if (shallowCopyObj) {
+                shallowCopyObj.address.city = "Los Angeles";
+                shallowCopyObj.address.coordinates.lat = 34.0522;
+                shallowCopyObj.hobbies.push("swimming");
+            }
+            
+            // Modify a nested property in the deep copy
+            if (deepCopyObj) {
+                deepCopyObj.address.city = "Chicago";
+                deepCopyObj.address.coordinates.lat = 41.8781;
+                deepCopyObj.hobbies.push("hiking");
+            }
+            
+            // Also modify original to see comparisons
+            originalObject.name = "Jane Smith";
+            
+            displayObjects();
+            
+            // Add explanation
+            resultDiv.textContent += '\n\n--- WHAT HAPPENED? ---\n';
+            resultDiv.textContent += '1. Original name changed to "Jane Smith"\n';
+            
+            if (shallowCopyObj) {
+                resultDiv.textContent += '2. Shallow copy address changed to "Los Angeles" - ALSO affects original!\n';
+                resultDiv.textContent += '3. Shallow copy hobbies modified - ALSO affects original!\n';
+            }
+            
+            if (deepCopyObj) {
+                resultDiv.textContent += '4. Deep copy address changed to "Chicago" - DOES NOT affect original!\n';
+                resultDiv.textContent += '5. Deep copy hobbies modified - DOES NOT affect original!\n';
+            }
+        });
+        
+        // Reset all objects
+        resetBtn.addEventListener('click', function() {
+            originalObject = null;
+            shallowCopyObj = null;
+            deepCopyObj = null;
+            resultDiv.textContent = "All objects have been reset. Click 'Create Sample Object' to start again.";
+        });
+    </script>
+</body>
+</html>
